@@ -1,0 +1,247 @@
+/*
+ * The MIT License (MIT)
+ * Copyright (c) 2015 SK PLANET. All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+/*!
+ * \file pwlib_config.h
+ * \brief 라이브러리 환경
+ * \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
+ * \license This project is released under the MIT License.
+ * \warning 이 파일을 라이브러리 소스에서는 사용하지 말 것.
+ */
+
+#ifndef __PWLIB_CONFIG_H__
+#define __PWLIB_CONFIG_H__
+
+#if 0
+//! \brief 라이브러리 디버깅용. 건들지 마시오.
+#	define _PW_HEAVY_TRACE 1
+#endif
+
+#cmakedefine HAVE_CXX11	@HAVE_CXX11@
+
+namespace pw {
+
+using LibraryVersion = enum class LibraryVersion : int
+{
+	MAJOR = @pw_VERSION_MAJOR@,
+	MINOR = @pw_VERSION_MINOR@,
+	PATCH = @pw_VERSION_PATCH@,
+};
+
+}; //namespace pw
+
+#cmakedefine	HAVE_ADDRINFO_STRUCT		@HAVE_ADDRINFO_STRUCT@
+#cmakedefine	HAVE_ALARM		@HAVE_ALARM@
+#cmakedefine	HAVE_ARPA_INET_H		@HAVE_ARPA_INET_H@
+#cmakedefine	HAVE_ATEXIT		@HAVE_ATEXIT@
+#cmakedefine	HAVE_BZERO		@HAVE_BZERO@
+#cmakedefine	HAVE_DES		@HAVE_DES@
+#cmakedefine	HAVE_DEVEPOLL			@HAVE_DEVEPOLL@
+#cmakedefine	HAVE_DEVPOLL			@HAVE_DEVPOLL@
+#cmakedefine	HAVE_DIRENT_H		@HAVE_DIRENT_H@
+#cmakedefine	HAVE_DOPRNT		@HAVE_DOPRNT@
+#cmakedefine	HAVE_DUP2		@HAVE_DUP2@
+#cmakedefine	HAVE_EPOLL		@HAVE_EPOLL@
+#cmakedefine	HAVE_FCNTL_H		@HAVE_FCNTL_H@
+#cmakedefine	HAVE_FDATASYNC		@HAVE_FDATASYNC@
+#cmakedefine	HAVE_FMODL		@HAVE_FMODL@
+#cmakedefine	HAVE_FORK		@HAVE_FORK@
+#cmakedefine	HAVE_FTRUNCATE		@HAVE_FTRUNCATE@
+#cmakedefine	HAVE_F_SETAUXFL		@HAVE_F_SETAUXFL@
+#cmakedefine	HAVE_F_SETSIG		@HAVE_F_SETSIG@
+#cmakedefine	HAVE_GETHOSTBYADDR		@HAVE_GETHOSTBYADDR@
+#cmakedefine	HAVE_GETHOSTBYADDR_R		@HAVE_GETHOSTBYADDR_R@
+#cmakedefine	HAVE_GETHOSTBYNAME		@HAVE_GETHOSTBYNAME@
+#cmakedefine	HAVE_GETHOSTBYNAME2_R		@HAVE_GETHOSTBYNAME2_R@
+#cmakedefine	HAVE_GETHOSTBYNAME_R		@HAVE_GETHOSTBYNAME_R@
+#cmakedefine	HAVE_GETHOSTNAME		@HAVE_GETHOSTNAME@
+#cmakedefine	HAVE_GETLOGIN_R		@HAVE_GETLOGIN_R@
+#cmakedefine	HAVE_GETMNTENT		@HAVE_GETMNTENT@
+#cmakedefine	HAVE_GETPAGESIZE		@HAVE_GETPAGESIZE@
+#cmakedefine	HAVE_GETPWNAM_R		@HAVE_GETPWNAM_R@
+#cmakedefine	HAVE_GETPWUID_R		@HAVE_GETPWUID_R@
+#cmakedefine	HAVE_GETSERVBYNAME_R		@HAVE_GETSERVBYNAME_R@
+#cmakedefine	HAVE_GETSERVBYPORT_R		@HAVE_GETSERVBYPORT_R@
+#cmakedefine	HAVE_GETTIMEOFDAY		@HAVE_GETTIMEOFDAY@
+#cmakedefine	HAVE_GLIB2			@HAVE_GLIB2@
+#cmakedefine	HAVE_GMP			@HAVE_GMP@
+#cmakedefine	HAVE_GMTIME_R		@HAVE_GMTIME_R@
+#cmakedefine	HAVE_INET_ATON		@HAVE_INET_ATON@
+#cmakedefine	HAVE_INET_NTOA		@HAVE_INET_NTOA@
+#cmakedefine	HAVE_INT128_T		@HAVE_INT128_T@
+#cmakedefine	HAVE_INT128_T_GNU		@HAVE_INT128_T_GNU@
+#cmakedefine	HAVE_INTTYPES_H		@HAVE_INTTYPES_H@
+#cmakedefine	HAVE_IN_PKTINFO_STRUCT		@HAVE_IN_PKTINFO_STRUCT@
+#cmakedefine	HAVE_ISASCII		@HAVE_ISASCII@
+#cmakedefine	HAVE_JSONCPP		@HAVE_JSONCPP@
+#cmakedefine	HAVE_KQUEUE			@HAVE_KQUEUE@
+#cmakedefine	HAVE_LIBPTHREAD		@HAVE_LIBPTHREAD@
+#cmakedefine	HAVE_LIBPTHREADS		@HAVE_LIBPTHREADS@
+#cmakedefine	HAVE_LIMITS_H		@HAVE_LIMITS_H@
+#cmakedefine	HAVE_LOCALTIME_R		@HAVE_LOCALTIME_R@
+#cmakedefine	HAVE_MALLOC		@HAVE_MALLOC@
+#cmakedefine	HAVE_MEMCHR		@HAVE_MEMCHR@
+#cmakedefine	HAVE_MEMMOVE		@HAVE_MEMMOVE@
+#cmakedefine	HAVE_MEMORY_H		@HAVE_MEMORY_H@
+#cmakedefine	HAVE_MEMSET		@HAVE_MEMSET@
+#cmakedefine	HAVE_MKSTEMP		@HAVE_MKSTEMP@
+#cmakedefine	HAVE_MMAP		@HAVE_MMAP@
+#cmakedefine	HAVE_MNTENT_H		@HAVE_MNTENT_H@
+#cmakedefine	HAVE_MSGHDR_MSG_CONTROL			@HAVE_MSGHDR_MSG_CONTROL@
+#cmakedefine	HAVE_MUNMAP		@HAVE_MUNMAP@
+#cmakedefine	HAVE_NDIR_H		@HAVE_NDIR_H@
+#cmakedefine	HAVE_NETDB_H		@HAVE_NETDB_H@
+#cmakedefine	HAVE_NETINET_IN_H		@HAVE_NETINET_IN_H@
+#cmakedefine	HAVE_NLIST_H		@HAVE_NLIST_H@
+#cmakedefine	HAVE_POLL		@HAVE_POLL@
+#cmakedefine	HAVE_POLL_H		@HAVE_POLL_H@
+#cmakedefine	HAVE_PSELECT		@HAVE_PSELECT@
+#cmakedefine	HAVE_PTHREAD_H		@HAVE_PTHREAD_H@
+#cmakedefine	HAVE_PTHREAD_SPIN_TIMEDLOCK	@HAVE_PTHREAD_SPIN_TIMEDLOCKi@
+#cmakedefine	HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK	@HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK@
+#cmakedefine	HAVE_PUTENV		@HAVE_PUTENV@
+#cmakedefine	HAVE_READDIR_R		@HAVE_READDIR_R@
+#cmakedefine	HAVE_REALLOC		@HAVE_REALLOC@
+#cmakedefine	HAVE_SELECT		@HAVE_SELECT@
+#cmakedefine	HAVE_SOCKET		@HAVE_SOCKET@
+#cmakedefine	HAVE_SOCKLEN_T		@HAVE_SOCKLEN_T@
+#cmakedefine	HAVE_SQLITE3		@HAVE_SQLITE3@
+#cmakedefine	HAVE_STAT_EMPTY_STRING_BUG		@HAVE_STAT_EMPTY_STRING_BUG@
+#cmakedefine	HAVE_STDBOOL_H		@HAVE_STDBOOL_H@
+#cmakedefine	HAVE_STDDEF_H		@HAVE_STDDEF_H@
+#cmakedefine	HAVE_STDINT_H		@HAVE_STDINT_H@
+#cmakedefine	HAVE_STDLIB_H		@HAVE_STDLIB_H@
+#cmakedefine	HAVE_STRCASECMP		@HAVE_STRCASECMP@
+#cmakedefine	HAVE_STRCHR		@HAVE_STRCHR@
+#cmakedefine	HAVE_STRDUP		@HAVE_STRDUP@
+#cmakedefine	HAVE_STRERROR		@HAVE_STRERROR@
+#cmakedefine	HAVE_STRFTIME		@HAVE_STRFTIME@
+#cmakedefine	HAVE_STRINGS_H		@HAVE_STRINGS_H@
+#cmakedefine	HAVE_STRING_H		@HAVE_STRING_H@
+#cmakedefine	HAVE_STRNCASECMP		@HAVE_STRNCASECMP@
+#cmakedefine	HAVE_STRNLEN		@HAVE_STRNLEN@
+#cmakedefine	HAVE_STRRCHR		@HAVE_STRRCHR@
+#cmakedefine	HAVE_STRSTR		@HAVE_STRSTR@
+#cmakedefine	HAVE_STRTOL		@HAVE_STRTOL@
+#cmakedefine	HAVE_STRTOUL		@HAVE_STRTOUL@
+#cmakedefine	HAVE_STRTOULL		@HAVE_STRTOULL@
+#cmakedefine	HAVE_SYSLOG_H		@HAVE_SYSLOG_H@
+#cmakedefine	HAVE_SYS_DIR_H		@HAVE_SYS_DIR_H@
+#cmakedefine	HAVE_SYS_FILE_H		@HAVE_SYS_FILE_H@
+#cmakedefine	HAVE_SYS_FILIO_H		@HAVE_SYS_FILIO_H@
+#cmakedefine	HAVE_SYS_IOCTL_H		@HAVE_SYS_IOCTL_H@
+#cmakedefine	HAVE_SYS_MOUNT_H		@HAVE_SYS_MOUNT_H@
+#cmakedefine	HAVE_SYS_NDIR_H		@HAVE_SYS_NDIR_H@
+#cmakedefine	HAVE_SYS_SELECT_H		@HAVE_SYS_SELECT_H@
+#cmakedefine	HAVE_SYS_SOCKET_H		@HAVE_SYS_SOCKET_H@
+#cmakedefine	HAVE_SYS_SOCKIO_H		@HAVE_SYS_SOCKIO_H@
+#cmakedefine	HAVE_SYS_STATVFS_H		@HAVE_SYS_STATVFS_H@
+#cmakedefine	HAVE_SYS_STAT_H		@HAVE_SYS_STAT_H@
+#cmakedefine	HAVE_SYS_TIME_H		@HAVE_SYS_TIME_H@
+#cmakedefine	HAVE_SYS_TYPES_H		@HAVE_SYS_TYPES_H@
+#cmakedefine	HAVE_SYS_VFS_H		@HAVE_SYS_VFS_H@
+#cmakedefine	HAVE_SYS_WAIT_H		@HAVE_SYS_WAIT_H@
+#cmakedefine	HAVE_TIMESPEC_STRUCT		@HAVE_TIMESPEC_STRUCT@
+#cmakedefine	HAVE_TZSET		@HAVE_TZSET@
+#cmakedefine	HAVE_UNAME		@HAVE_UNAME@
+#cmakedefine	HAVE_UNISTD_H		@HAVE_UNISTD_H@
+#cmakedefine	HAVE_URIPARSER	@HAVE_URIPARSER@
+#cmakedefine	HAVE_VFORK		@HAVE_VFORK@
+#cmakedefine	HAVE_VFORK_H		@HAVE_VFORK_H@
+#cmakedefine	HAVE_VPRINTF		@HAVE_VPRINTF@
+#cmakedefine	HAVE_WORKING_FORK		@HAVE_WORKING_FORK@
+#cmakedefine	HAVE_WORKING_VFORK		@HAVE_WORKING_VFORK@
+#cmakedefine	HAVE__BOOL		@HAVE__BOOL@
+#cmakedefine	HAVE__POSIX_GETPWNAM_R		@HAVE__POSIX_GETPWNAM_R@
+#cmakedefine	HAVE__POSIX_GETPWUID_R		@HAVE__POSIX_GETPWUID_R@
+#cmakedefine	HAVE_GETADDRINFO_PROTO		@HAVE_GETADDRINFO_PROTO@
+#cmakedefine	HAVE_GETNAMEINFO_PROTO		@HAVE_GETNAMEINFO_PROTO@
+#cmakedefine	HAVE_GETHOSTNAME_PROTO		@HAVE_GETHOSTNAME_PROTO@
+#cmakedefine	HAVE_HSTRERROR_PROTO		@HAVE_HSTRERROR_PROTO@
+#cmakedefine	HAVE_IF_NAMETOINDEX_PROTO		@HAVE_IF_NAMETOINDEX_PROTO@
+#cmakedefine	HAVE_INET_PTON_PROTO		@HAVE_INET_PTON_PROTO@
+#cmakedefine	HAVE_INET_ATON_PROTO		@HAVE_INET_ATON_PROTO@
+#cmakedefine	HAVE_ISFDTYPE_PROTO		@HAVE_ISFDTYPE_PROTO@
+#cmakedefine	HAVE_PSELECT_PROTO		@HAVE_PSELECT_PROTO@
+#cmakedefine	HAVE_SOCKATMARK_PROTO		@HAVE_SOCKATMARK_PROTO@
+#cmakedefine	HAVE_SNPRINTF_PROTO		@HAVE_SNPRINTF_PROTO@
+#cmakedefine	HAVE_IFADDRS_H			@HAVE_IFADDRS_H@
+#cmakedefine	HAVE_NET_IF_H			@HAVE_NET_IF_H@
+#cmakedefine	HAVE_GETIFADDRS			@HAVE_GETIFADDRS@
+#cmakedefine	HAVE_IF_NAMEINDEX		@HAVE_IF_NAMEINDEX@
+#cmakedefine	HAVE_IF_NAMEINDEX_STRUCT	@HAVE_IF_NAMEINDEX_STRUCT@
+
+#cmakedefine	LSTAT_FOLLOWS_SLASHED_SYMLINK		@LSTAT_FOLLOWS_SLASHED_SYMLINK@
+#cmakedefine	MAINSERVER		@MAINSERVER@
+#cmakedefine	NEED_IDTRANSFER		@NEED_IDTRANSFER@
+#cmakedefine	NO_THUNDERING_HERD		@NO_THUNDERING_HERD@
+#cmakedefine	OS_BSD		@OS_BSD@
+#cmakedefine	OS_LINUX	@OS_LINUX@
+#cmakedefine	OS_SUNOS	@OS_SUNOS@
+#cmakedefine	PROTOTYPES		@PROTOTYPES@
+#cmakedefine	RETSIGTYPE		@RETSIGTYPE@
+#cmakedefine	SELECT_TYPE_ARG1		@SELECT_TYPE_ARG1@
+#cmakedefine	SELECT_TYPE_ARG234		@SELECT_TYPE_ARG234@
+#cmakedefine	SELECT_TYPE_ARG5		@SELECT_TYPE_ARG5@
+#cmakedefine	SETVBUF_REVERSED		@SETVBUF_REVERSED@
+#cmakedefine	SIZEOF_CHAR		@SIZEOF_CHAR@
+#cmakedefine	SIZEOF_INT		@SIZEOF_INT@
+#cmakedefine	SIZEOF_LONG		@SIZEOF_LONG@
+#cmakedefine	SIZEOF_LONG_LONG		@SIZEOF_LONG_LONG@
+#cmakedefine	SIZEOF_SHORT		@SIZEOF_SHORT@
+#cmakedefine	SIZEOF_SIZE_T		@SIZEOF_SIZE_T@
+#cmakedefine	SIZEOF_TIME_T		@SIZEOF_TIME_T@
+#cmakedefine	STDC_HEADERS		@STDC_HEADERS@
+#cmakedefine	TERMIO		@TERMIO@
+#cmakedefine	TERMIOS		@TERMIOS@
+#cmakedefine	VERSION		@VERSION@
+#cmakedefine	WORDS_BIGENDIAN		@WORDS_BIGENDIAN@
+#cmakedefine	_GNU_SOURCE		@_GNU_SOURCE@
+#cmakedefine	__PROTOTYPES		@__PROTOTYPES@
+#cmakedefine	HAVE_MSGHDR_MSG_CONTROL		@HAVE_MSGHDR_MSG_CONTROL@
+
+#cmakedefine	HAVE_EVP_CIPHER_CTX			@HAVE_EVP_CIPHER_CTX@
+#cmakedefine	HAVE_EVP_MD_CTX			@HAVE_EVP_MD_CTX@
+#cmakedefine	HAVE_EVP_MD2			@HAVE_EVP_MD2@
+#cmakedefine	HAVE_EVP_PKEY_CTX_NEW_ID	@HAVE_EVP_PKEY_CTX_NEW_ID@
+#cmakedefine	HAVE_EVP_PKEY_NEW_MAC_KEY	@HAVE_EVP_PKEY_NEW_MAC_KEY@
+#cmakedefine	HAVE_EVP_DIGESTSIGNINIT		@HAVE_EVP_DIGESTSIGNINIT@
+#cmakedefine	HAVE_EVP_DIGESTVERIFYINIT		@HAVE_EVP_DIGESTVERIFYINIT@
+
+#cmakedefine	HAVE_SSLV2_METHOD	@HAVE_SSLV2_METHOD@
+#cmakedefine	HAVE_TLSV1_METHOD	@HAVE_TLSV1_METHOD@
+#cmakedefine	HAVE_TLSV1_1_METHOD	@HAVE_TLSV1_1_METHOD@
+#cmakedefine	HAVE_TLSV1_2_METHOD	@HAVE_TLSV1_2_METHOD@
+
+#cmakedefine	HAVE_HTONLL			@HAVE_HTONLL@
+#cmakedefine	PW_HAVE_INT128		@PW_HAVE_INT128@
+
+#cmakedefine	PW_USE_BOOST_REGEX	@PW_USE_BOOST_REGEX@
+#cmakedefine	PW_USE_STD_REGEX	@PW_USE_STD_REGEX@
+
+#if (HAVE_INT128_T_GNU && !HAVE_INT128_T)
+using int128_t = __int128_t;
+using uint128_t = __uint128_t;
+#endif// GNU but no standard
+
+#endif//!__PWLIB_CONFIG_H__

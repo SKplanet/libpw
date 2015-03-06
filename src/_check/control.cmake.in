@@ -1,0 +1,9 @@
+Package: @pw_NAME@
+Version: @pw_VERSION@
+Maintainer: @pw_CONTACT@
+Section: Libraries
+Priority: optional
+Homepage: @pw_URL@
+Architecture: @CPACK_DEBIAN_PACKAGE_ARCHITECTURE@
+Depends: libssl-dev, libz-dev, libjsoncpp-dev, liburiparser-dev
+Description: @pw_DESCRIPTION_DATA@
