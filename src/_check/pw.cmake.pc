@@ -8,5 +8,5 @@ Description: PW library
 Version: @pw_VERSION@
 URL: @pw_URL@
 Requires: zlib, openssl >= 1.0.0, uriparser, jsoncpp
-Libs: -lssl -lcrypto -ldl -lpthread -lrt -L${libdir} -lpw @URIPARSER_LDFLAGS@ @JSONCPP_LDFLAGS@ @SQLITE3_LDFLAGS@
+Libs: -lssl -lcrypto -ldl -lpthread -lrt @URIPARSER_LDFLAGS@ @JSONCPP_LDFLAGS@ @SQLITE3_LDFLAGS@ @_PW_PC_BOOST_REGEX_LDFLAGS@ -L${libdir} -lpw
 Cflags: @CXXFLAGS_STD@ @CXXFLAGS_THREAD@ -I${includedir} @URIPARSER_CFLAGS@ @JSONCPP_CFLAGS@ @SQLITE3_CFLAGS@

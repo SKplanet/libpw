@@ -263,31 +263,42 @@ set(CMAKE_REQUIRED_DEFINITIONS ${save_defs})
 set(CMAKE_REQUIRED_LIBRARIES ${save_libs})
 
 if (HAVE_CXX11)
-	set(CXXFLAGS_STD "-std=c++11 -D_REENTRANT")
-	set(CXXFLAGS_THREAD "-pthread")
+	set(CXXFLAGS_STD "-std=c++11")
+	set(CXXFLAGS_THREAD "-D_REENTRANT -pthread")
 endif()
 
 set(Boost_USE_MULTITHREADED TRUE)
 include(FindBoost)
 find_package(Boost 1.54 QUIET OPTIONAL_COMPONENTS regex)
 if (Boost_REGEX_FOUND)
-	set(PW_USE_BOOST_REGEX 1)
+	set(PW_USE_BOOST_REGEX 1 CACHE BOOL "Use boost regex")
+	set(_PW_PC_BOOST_REGEX_LDFLAGS -lboost_regex)
+	set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} boost_regex)
+	set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${Boost_INCLUDE_DIRS})
 endif()
 
 pkg_search_module(URIPARSER REQUIRED QUIET uriparser liburiparser)
 if (URIPARSER_FOUND)
 	set(HAVE_URIPARSER 1)
+	set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} uriparser)
+	set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${URIPARSER_INCLUDE_DIRS})
 endif()
 
 pkg_search_module(JSONCPP REQUIRED QUIET jsoncpp libjsoncpp)
 if (JSONCPP_FOUND)
 	set(HAVE_JSONCPP 1)
+	set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} jsoncpp)
+	set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${JSONCPP_INCLUDE_DIRS})
 endif()
 
 pkg_search_module(SQLITE3 QUIET sqlite3 libsqlite3)
 if (SQLITE3_FOUND)
 	set(HAVE_SQLITE3 1)
+	set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} sqlite3)
 endif()
+
+set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} CACHE STRING "Addtional libraries")
+set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "Addtional include directories")
 
 execute_process(COMMAND dpkg --print-architecture
 	OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE

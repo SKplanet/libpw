@@ -49,6 +49,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 %files devel
 %{_includedir}/pw/*.h
+%{_libdir}/pkgconfig/pw.pc
 
 %files static
 %{_libdir}/@pw_NAME@.a

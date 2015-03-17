@@ -27,6 +27,10 @@
 cmake_minimum_required(VERSION 3.0)
 project(pw C CXX)
 
+if (NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE RelWithDebInfo)
+endif()
+
 set(CMAKE_USE_RELATIVE_PATHS true)
 include(GNUInstallDirs)
 
@@ -60,39 +64,24 @@ set(RPMBUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild)
 set(RPMBUILDROOT_DIR ${RPMBUILD_DIR}/BUILDROOT)
 set(RPMSOURCE_FILE "libpw-${pw_VERSION}.tgz")
 
-add_definitions(-std=c++11)
-add_definitions(-pthread)
-add_definitions(-D_REENTRANT)
-add_definitions(-Wall)
-add_definitions(-fpermissive)
-add_definitions(-fPIC)
-add_definitions(-O3)
-add_definitions(-g)
-
-set(PWLIBS pw z ssl crypto dl pthread)
+set(PWCXXFLAGS -std=c++11 -D_REENTRANT -pthread  -Wall -fpermissive -fPIC
+	CACHE STRING "PW library C++ flags" FORCE)
 
 add_subdirectory(_check)
 
-# 기타 라이브러리
-if (JSONCPP_FOUND)
-	include_directories(${JSONCPP_INCLUDE_DIRS})
-	set(PWLIBS ${PWLIBS} ${JSONCPP_LIBRARIES})
-endif()
+set(PWLIBS z ssl crypto dl pthread)
+set(PWINC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "PW include directories" FORCE)
+set(PWLIBS_STATIC libpw.a ${PWLIBS} ${PW_ADDITIONAL_LIBS} CACHE STRING "PW(static) libraries" FORCE)
+set(PWLIBS_SHARED libpw.so ${PWLIBS} ${PW_ADDITIONAL_LIBS} CACHE STRING "PW(shared) libraries" FORCE )
+set(PWLIBS ${PWLIBS_STATIC} CACHE STRING "PW libraries" FORCE)
 
-if (SQLITE3_FOUND)
-	include_directories(${SQLITE3_INCLUDE_DIRS})
-	set(PWLIBS ${PWLIBS} ${SQLITE3_LIBRARIES})
-endif()
-
-if (URIPARSER_FOUND)
-	include_directories(${URIPARSER_INCLUDE_DIRS})
-	set(PWLIBS ${PWLIBS} ${URIPARSER_LIBRARIES})
-endif()
-
-set(PWLIBS ${PWLIBS} CACHE STRING "Purewell Library" FORCE)
+include_directories(${PWINC_DIRS})
+add_definitions(${PWCXXFLAGS})
 
 # Set sources
 file(GLOB HDRS *.h)
+list(REMOVE_ITEM HDRS pw_iopoller_epoll.h pw_iopoller_select.h)
+
 set(SRCS_COMMON pw_common.cpp)
 set(SRCS_SYSTEM pw_log.cpp pw_timer.cpp pw_sysinfo.cpp pw_module.cpp pw_exception.cpp)
 set(SRCS_STRING pw_string.cpp pw_tokenizer.cpp pw_ini.cpp pw_encode.cpp
@@ -161,4 +150,15 @@ install(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/../README.md
 	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/libpw)
 
+install(FILES
+	${CMAKE_CURRENT_BINARY_DIR}/pw.pc
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig/)
+
 include(CPack)
+
+# Infomation messages...
+message(STATUS "Include directories(PWINC_DIRS): ${PWINC_DIRS}")
+message(STATUS "Libraries(PWLIBS): ${PWLIBS}")
+message(STATUS "Libraries for static(PWLIBS_STATIC): ${PWLIBS_STATIC}")
+message(STATUS "Libraries for shared(PWLIBS_SHARED): ${PWLIBS_SHARED}")
+message(STATUS "Watch pw.pc(${CMAKE_CURRENT_BINARY_DIR}/pw.pc) for building flags")
