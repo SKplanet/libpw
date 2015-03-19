@@ -88,7 +88,7 @@ public:
 			m_ssl = nullptr;
 		}
 
-		if ( -1 == m_fd )
+		if ( -1 not_eq m_fd )
 		{
 			::close(m_fd);
 			m_fd = -1;
