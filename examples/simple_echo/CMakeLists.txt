@@ -24,13 +24,7 @@
 # \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
 # \license This project is released under the MIT License.
 
-cmake_minimum_required(VERSION 3.0)
-project(examples CXX)
-
-include_directories(${PWINC_DIRS})
-add_definitions(${PWCXXFLAGS})
-
-add_subdirectory(keys)
-add_subdirectory(echo)
-add_subdirectory(simple_echo)
-add_subdirectory(http)
+project(simple_echo CXX)
+set(TARGET ${PROJECT_NAME})
+add_executable(${TARGET} main.cpp)
+target_link_libraries(${TARGET} ${PWLIBS})
