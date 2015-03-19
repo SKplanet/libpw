@@ -30,4 +30,6 @@ project(examples CXX)
 include_directories(${PWINC_DIRS})
 add_definitions(${PWCXXFLAGS})
 
+add_subdirectory(keys)
 add_subdirectory(echo)
+add_subdirectory(http)

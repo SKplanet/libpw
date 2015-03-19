@@ -24,7 +24,7 @@
 # \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
 # \license This project is released under the MIT License.
 
-project(echo CXX)
+project(http CXX)
 set(TARGET ${PROJECT_NAME})
 add_executable(${TARGET} main.cpp)
 target_link_libraries(${TARGET} ${PWLIBS})
