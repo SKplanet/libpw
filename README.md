@@ -55,6 +55,13 @@
 ### 저장소
 	git clone https://github.com/skplanet/libpw.git
 
+### 빌드
+	$ git clone https://github.com/skplanet/libpw.git
+	$ cd libpw
+	$ make		; build 디렉토리를 만들고, cmake를 통해 빌드를 구성합니다.
+	$ cd build
+	$ make		; 실제 컴파일을 하여 빌드를 시작합니다.
+	
 ## 분류
 대략적인 분류입니다.
 자세한 것은 doxygen을 통해 만들어진 문서나, 헤더 파일에 있는 주석을 참고하세요.
