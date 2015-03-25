@@ -62,6 +62,13 @@
 	$ cd build
 	$ make		; 실제 컴파일을 하여 빌드를 시작합니다.
 	
+### 패키징
+패키지는 RPM과 DEB를 지원합니다.
+
+	$ cd build
+	$ make libpw.rpm	; RPM을 만들며, libpw/build/rpmbuild/RPMS/[ARCH]/ 디렉토리에 생성합니다.
+	$ make libpw.deb	; DEB을 만들며, libpw/build/ 디렉토리에 생성합니다.
+
 ## 분류
 대략적인 분류입니다.
 자세한 것은 doxygen을 통해 만들어진 문서나, 헤더 파일에 있는 주석을 참고하세요.
