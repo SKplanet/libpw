@@ -48,7 +48,12 @@
 #	include <sys/param.h>
 #	include <sys/ucred.h>
 #	include <sys/mount.h>
+#	include <fstab.h>
 #endif//OS_BSD
+
+#if defined(OS_APPLE)
+#	include <fstab.h>
+#endif//OS_APPLE
 
 #if defined(OS_LINUX)
 #	include <mntent.h>
@@ -157,6 +162,9 @@ SystemInformation::s_getNIC(nic_cont& out)
 		strcpy(ifr.ifr_name, nic.name.c_str());
 		if ( 0 == ioctl(sfd, SIOCGIFMETRIC, &ifr) ) nic.metric = ifr.ifr_metric;
 		if ( 0 == ioctl(sfd, SIOCGIFMTU, &ifr) ) nic.mtu = ifr.ifr_mtu;
+		
+#ifdef SIOCGIFHWADDR
+		// Get MAC address!
 		if ( 0 == ioctl(sfd, SIOCGIFHWADDR, &ifr) )
 		{
 			const unsigned char* hwptr((unsigned char*) &ifr.ifr_hwaddr.sa_data);
@@ -179,15 +187,18 @@ SystemInformation::s_getNIC(nic_cont& out)
 
 			ss.str().swap(nic.hwaddr);
 		}
+#endif//SIOCGIFHWADDR
 
 		if ( ptr->ifa_addr )
 		{
 			SocketAddress sa(ptr->ifa_addr, sizeof(struct sockaddr));
+#ifdef PF_PACKET
 			if ( sa.getFamily() == PF_PACKET )
 			{
 				ptr = ptr->ifa_next;
 				continue;
 			}
+#endif//PF_PACKET
 
 			char name[1024];
 			if ( sa.getName(name, sizeof(name), nullptr, 0, nullptr) ) nic.addr = name;
@@ -284,6 +295,7 @@ SystemInformation::s_getFileSystem(fs_type& out, const char* mp)
 bool
 SystemInformation::s_getFileSystem(fs_cont& out)
 {
+#if defined(OS_LINUX)
 	FILE* fp(setmntent(_PATH_MOUNTED, "r"));
 	if ( nullptr == fp ) return false;
 
@@ -308,6 +320,29 @@ SystemInformation::s_getFileSystem(fs_cont& out)
 	out.swap(tmp);
 
 	return true;
+#elif defined(OS_BSD) || defined(OS_APPLE)
+	auto fstab = getfsent();
+	if ( nullptr == fstab ) return false;
+	
+	fs_cont tmp;
+	fs_type fs;
+	while ( fstab )
+	{
+		if ( not s_getFileSystem(fs, fstab->fs_file) )
+		{
+			endfsent();
+			return false;
+		}
+		
+		tmp.insert(fs_cont::value_type(fstab->fs_file, fs));
+		++fstab;
+	}
+	
+	endfsent();
+	out.swap(tmp);
+	
+	return true;
+#endif
 }
 
 bool

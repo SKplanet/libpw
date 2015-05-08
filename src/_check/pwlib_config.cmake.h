@@ -196,8 +196,9 @@ using LibraryVersion = enum class LibraryVersion : int
 #cmakedefine	NEED_IDTRANSFER		@NEED_IDTRANSFER@
 #cmakedefine	NO_THUNDERING_HERD		@NO_THUNDERING_HERD@
 #cmakedefine	OS_BSD		@OS_BSD@
+#cmakedefine	OS_UNIX		@OS_UNIX@
 #cmakedefine	OS_LINUX	@OS_LINUX@
-#cmakedefine	OS_SUNOS	@OS_SUNOS@
+#cmakedefine	OS_APPLE	@OS_APPLE@
 #cmakedefine	PROTOTYPES		@PROTOTYPES@
 #cmakedefine	RETSIGTYPE		@RETSIGTYPE@
 #cmakedefine	SELECT_TYPE_ARG1		@SELECT_TYPE_ARG1@
@@ -219,6 +220,7 @@ using LibraryVersion = enum class LibraryVersion : int
 #cmakedefine	_GNU_SOURCE		@_GNU_SOURCE@
 #cmakedefine	__PROTOTYPES		@__PROTOTYPES@
 #cmakedefine	HAVE_MSGHDR_MSG_CONTROL		@HAVE_MSGHDR_MSG_CONTROL@
+#cmakedefine	HAVE_TIMED_MUTEX	@HAVE_TIMED_MUTEX@
 
 #cmakedefine	HAVE_EVP_CIPHER_CTX			@HAVE_EVP_CIPHER_CTX@
 #cmakedefine	HAVE_EVP_MD_CTX			@HAVE_EVP_MD_CTX@

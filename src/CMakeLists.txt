@@ -137,6 +137,11 @@ set_target_properties(pw_static
 		SOVERSION ${pw_VERSION_MAJOR}
 		OUTPUT_NAME pw)
 
+target_link_libraries(pw_shared
+	-lstdc++
+	/usr/local/lib/libjsoncpp.dylib
+	${PW_ADDITIONAL_LIBS})
+
 install(TARGETS pw_static pw_shared
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

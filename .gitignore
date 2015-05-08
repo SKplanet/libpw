@@ -29,6 +29,7 @@
 
 build
 pwlib_config.h
+.DS_Store
 
 # IDE
 *.kdev4

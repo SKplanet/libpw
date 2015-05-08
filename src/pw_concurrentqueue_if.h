@@ -49,13 +49,22 @@ public:
 	using callable = void (*) (ConcurrentQueueTemplate<_Type>&, void*);
 
 	using lock_type = std::mutex;
+#ifdef HAVE_TIMED_MUTEX
 	using timed_lock_type = std::timed_mutex;
 	using ulock_type = typename std::unique_lock<timed_lock_type>;
+#else
+	using ulock_type = typename std::unique_lock<lock_type>;
+#endif//HAVE_TIMED_MUTEX
 	using cv_type = std::condition_variable_any;
 
 private:
 	mutable cv_type m_cv;
+#ifdef HAVE_TIMED_MUTEX
 	mutable timed_lock_type m_lock;
+#else
+	mutable lock_type m_lock;
+#endif//HAVE_TIMED_MUTEX
+	
 	queue_type m_cont;
 	size_t m_max_size = size_t(0);
 
@@ -100,6 +109,7 @@ public:
 		m_cont.pop_front();
 	}
 
+#ifdef HAVE_TIMED_MUTEX
 	//! \brief 큐에서 시간 내에 하나를 꺼내온다.
 	//! 큐가 비어 있거나, 다른 스레드에서 사용하는 동안 시간을 검사한다.
 	//! \return 시간을 넘겼을 경우, 거짓을 반환한다.
@@ -122,6 +132,7 @@ public:
 		m_cont.pop_front();
 		return true;
 	}
+#endif//HAVE_TIMED_MUTEX
 
 	//! \brief 큐에서 하나를 꺼내온다.
 	//! 큐가 비어 있거나, 다른 스레드에서 사용하면 바로 실패를 반환한다.

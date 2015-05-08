@@ -40,6 +40,10 @@ namespace pw {
 #define _DEF_BUFLEN (1024*10)
 #define _DEF_BUF(x) char x[_DEF_BUFLEN] = {0x00}
 
+#ifndef O_LARGEFILE
+#	define O_LARGEFILE 0
+#endif//O_LARGEFILE
+    
 #define _PWLOG_OPENMODE (O_WRONLY|O_APPEND|O_CREAT|O_LARGEFILE|O_SYNC)
 #define _PWLOG_OPENFLAG (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 

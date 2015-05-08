@@ -259,7 +259,7 @@ struct char_ci_less
 {
 	inline constexpr bool operator () (const _Char c1, const _Char c2) const
 	{
-		static const auto& f = std::use_facet<std::ctype<_Char>>(std::locale());
+		const auto& f = std::use_facet<std::ctype<_Char>>(std::locale());
 		return f.toupper(c1) < f.toupper(c2);
 	}
 };
@@ -284,7 +284,7 @@ struct str_ci_less
 };
 
 struct host_type;
-struct uri_type;
+class uri_type;
 struct url_type;
 
 //! \brief host_type 리스트 타입

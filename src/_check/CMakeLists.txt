@@ -31,34 +31,71 @@ include(CheckStructHasMember)
 include(TestBigEndian)
 include(FindPkgConfig)
 
+set(PW_ADDITIONAL_LIBS "")
+set(PW_ADDITIONAL_INC_DIRS "")
+
 if ( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
 	set(LINUX 1)
-endif ( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
+endif ()
 
 if ( ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD" )
 	set(FREEBSD 1)
 	set(BSD 1)
-endif ( ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD" )
+endif ()
 
 if ( ${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD" )
 	set(OPENBSD 1)
 	set(BSD 1)
-endif ( ${CMAKE_SYSTEM_NAME} STREQUAL "OpenBSD" )
+endif ()
+
+if ( ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin" )
+	set(APPLE 1)
+endif ()
 
 if (UNIX)
 	set(OS_UNIX 1)
-endif(UNIX)
+endif()
 
 if (LINUX)
 	set(OS_LINUX 1)
-endif(LINUX)
+endif()
 
 if (BSD)
 	set(OS_BSD 1)
-endif(BSD)
+endif()
+
+if (APPLE)
+	set(OS_APPLE 1 CACHE BOOL "Apple MacOS")
+endif()
 
 test_big_endian(WORDS_BIGENDIAN)
 
+# Check C++11
+set(CHECK_CXX11 "#include <unordered_map>
+int main() { thread_local std::unordered_map<int, int> cont; auto itr = cont.find(10); return 0; }" )
+set(CHECK_TIMED_MUTEX "#include <mutex>
+int main() { std::timed_mutex lock; return 0; }")
+
+set(save_flags ${CMAKE_REQUIRED_FLAGS})
+set(save_defs ${CMAKE_REQUIRED_DEFINITIONS})
+set(save_libs ${CMAKE_REQUIRED_LIBRARIES})
+set(CMAKE_REQUIRED_FLAGS -std=c++11 -pthread)
+set(CMAKE_REQUIRED_DEFINITIONS -D_REENTRANT)
+set(CMAKE_REQUIRED_LIBRARIES pthread)
+check_cxx_source_compiles("${CHECK_CXX11}" HAVE_CXX11)
+check_cxx_source_compiles("${CHECK_TIMED_MUTEX}" HAVE_TIMED_MUTEX)
+set(CMAKE_REQUIRED_FLAGS ${save_flags})
+set(CMAKE_REQUIRED_DEFINITIONS ${save_defs})
+set(CMAKE_REQUIRED_LIBRARIES ${save_libs})
+
+if (HAVE_CXX11)
+	set(CXXFLAGS_STD "-std=c++11")
+	set(CXXFLAGS_THREAD "-D_REENTRANT -pthread")
+else()
+	message(FATAL_ERROR "libpw needs C++11 standard")
+endif()
+
+# Check something...
 check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
 check_include_file("dirent.h" HAVE_DIRENT_H)
 check_include_file("fcntl.h" HAVE_FCNTL_H)
@@ -215,23 +252,6 @@ check_function_exists("pthread_spin_timedlock" HAVE_PTHREAD_SPIN_TIMEDLOCK)
 check_function_exists("pthread_rwlock_timedwrlock"
 HAVE_PTHREAD_RWLOCK_TIMEDWRLOCK)
 
-set(CMAKE_EXTRA_INCLUDE_FILES "openssl/ssl.h")
-set(CMAKE_REQUIRED_LIBRARIES ssl crypto)
-check_function_exists("SSLv2_method" HAVE_SSLV2_METHOD)
-check_function_exists("TLSv1_method" HAVE_TLSV1_METHOD)
-check_function_exists("TLSv1_1_method" HAVE_TLSV1_1_METHOD)
-check_function_exists("TLSv1_2_method" HAVE_TLSV1_2_METHOD)
-
-set(CMAKE_EXTRA_INCLUDE_FILES "openssl/evp.h")
-set(CMAKE_REQUIRED_LIBRARIES ssl crypto)
-check_type_size("EVP_CIPHER_CTX" HAVE_EVP_CIPHER_CTX)
-check_type_size("EVP_MD_CTX" HAVE_EVP_MD_CTX)
-check_function_exists("EVP_md2" HAVE_EVP_MD2)
-check_function_exists("EVP_PKEY_CTX_new_id" HAVE_EVP_PKEY_CTX_NEW_ID)
-check_function_exists("EVP_PKEY_new_mac_key" HAVE_EVP_PKEY_NEW_MAC_KEY)
-check_function_exists("EVP_DigestSignInit" HAVE_EVP_DIGESTSIGNINIT)
-check_function_exists("EVP_DigestVerifyInit" HAVE_EVP_DIGESTVERIFYINIT)
-
 set(CMAKE_EXTRA_INCLUDE_FILES netinet/in.h;arpa/inet.h)
 check_function_exists("htons" HAVE_HTONS)
 check_function_exists("htonl" HAVE_HTONL)
@@ -246,26 +266,6 @@ check_c_source_compiles("${CHECK_INT128_T_GNU}" HAVE_INT128_T_GNU)
 if ( HAVE_INT128_T OR HAVE_INT128_T_GNU )
 	set(PW_HAVE_INT128 16)
 endif ()
-
-# Check C++11
-set(CHECK_CXX11 "#include <unordered_map>
-int main() { thread_local std::unordered_map<int, int> cont; auto itr = cont.find(10); return 0; }" )
-
-set(save_flags ${CMAKE_REQUIRED_FLAGS})
-set(save_defs ${CMAKE_REQUIRED_DEFINITIONS})
-set(save_libs ${CMAKE_REQUIRED_LIBRARIES})
-set(CMAKE_REQUIRED_FLAGS -std=c++11 -pthread)
-set(CMAKE_REQUIRED_DEFINITIONS -D_REENTRANT)
-set(CMAKE_REQUIRED_LIBRARIES pthread)
-check_cxx_source_compiles("${CHECK_CXX11}" HAVE_CXX11)
-set(CMAKE_REQUIRED_FLAGS ${save_flags})
-set(CMAKE_REQUIRED_DEFINITIONS ${save_defs})
-set(CMAKE_REQUIRED_LIBRARIES ${save_libs})
-
-if (HAVE_CXX11)
-	set(CXXFLAGS_STD "-std=c++11")
-	set(CXXFLAGS_THREAD "-D_REENTRANT -pthread")
-endif()
 
 set(Boost_USE_MULTITHREADED TRUE)
 include(FindBoost)
@@ -297,6 +297,33 @@ if (SQLITE3_FOUND)
 	set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} sqlite3)
 endif()
 
+# Add Zlib
+set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} z)
+
+# Check OpenSSL
+include(FindOpenSSL)
+find_package(OPENSSL 1.0.0 REQUIRED)
+set(CMAKE_EXTRA_INCLUDE_FILES "${OPENSSL_INCLUDE_DIR}/openssl/ssl.h")
+set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
+check_function_exists("SSLv2_method" HAVE_SSLV2_METHOD)
+check_function_exists("TLSv1_method" HAVE_TLSV1_METHOD)
+check_function_exists("TLSv1_1_method" HAVE_TLSV1_1_METHOD)
+check_function_exists("TLSv1_2_method" HAVE_TLSV1_2_METHOD)
+
+set(CMAKE_EXTRA_INCLUDE_FILES "${OPENSSL_INCLUDE_DIR}/openssl/evp.h")
+set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
+check_type_size("EVP_CIPHER_CTX" HAVE_EVP_CIPHER_CTX)
+check_type_size("EVP_MD_CTX" HAVE_EVP_MD_CTX)
+check_function_exists("EVP_md2" HAVE_EVP_MD2)
+check_function_exists("EVP_PKEY_CTX_new_id" HAVE_EVP_PKEY_CTX_NEW_ID)
+check_function_exists("EVP_PKEY_new_mac_key" HAVE_EVP_PKEY_NEW_MAC_KEY)
+check_function_exists("EVP_DigestSignInit" HAVE_EVP_DIGESTSIGNINIT)
+check_function_exists("EVP_DigestVerifyInit" HAVE_EVP_DIGESTVERIFYINIT)
+
+set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} ${OPENSSL_LIBRARIES})
+set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${OPENSSL_INCLUDE_DIR})
+
+# Cache Addtional flags...
 set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} CACHE STRING "Addtional libraries")
 set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "Addtional include directories")
 
