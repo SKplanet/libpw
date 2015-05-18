@@ -20,12 +20,7 @@
 # THE SOFTWARE.
 
 # \file CMakeLists.txt
-# \brief CMake Build script for pw library.
+# \brief CMake Build script for pw utilities.
 # \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
 # \license This project is released under the MIT License.
 
-# Library
-add_subdirectory(libsrc)
-
-# Applications
-add_subdirectory(appsrc)
