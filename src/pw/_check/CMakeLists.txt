@@ -302,7 +302,7 @@ set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} z)
 
 # Check OpenSSL
 include(FindOpenSSL)
-find_package(OPENSSL 1.0.0 REQUIRED)
+find_package(OpenSSL 1.0.0 REQUIRED)
 set(CMAKE_EXTRA_INCLUDE_FILES "${OPENSSL_INCLUDE_DIR}/openssl/ssl.h")
 set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
 check_function_exists("SSLv2_method" HAVE_SSLV2_METHOD)
@@ -326,6 +326,9 @@ set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${OPENSSL_INCLUDE_DIR})
 # Cache Addtional flags...
 set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} CACHE STRING "Addtional libraries")
 set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "Addtional include directories")
+
+message(STATUS "Additional libraries: ${PW_ADDITIONAL_LIBS}")
+message(STATUS "Additional include directories: ${PW_ADDITIONAL_INC_DIRS}")
 
 execute_process(COMMAND dpkg --print-architecture
 	OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE

@@ -26,8 +26,10 @@
 
 cmake_minimum_required(VERSION 3.0)
 project(examples CXX)
+include(GNUInstallDirs)
 
-include_directories(${PWINC_DIRS})
+include_directories(${PWINC_DIRS} ${pw_SOURCE_DIR}/..)
+link_directories(${pw_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_definitions(${PWCXXFLAGS})
 
 add_subdirectory(keys)

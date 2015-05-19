@@ -1,7 +1,7 @@
 CMAKE=cmake -DCMAKE_BUILD_TYPE=Release
 
 all:
-	@echo "make [unix|gcc49|eclipse|xcode|clean]" 
+	@echo "make [unix|gcc49|eclipse|xcode|clean|eclipse]" 
 
 unix:remake-build-dir
 	cd build;\
@@ -10,7 +10,7 @@ unix:remake-build-dir
 remake-build-dir:
 	$(RM) -rf build;\
 	mkdir build
-
+	
 gcc49:remake-build-dir
 	cd build;\
 	CC=gcc-4.9 CXX=g++-4.9 $(CMAKE) ..

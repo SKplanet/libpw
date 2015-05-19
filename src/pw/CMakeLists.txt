@@ -31,11 +31,11 @@ if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
-set(CMAKE_USE_RELATIVE_PATHS true)
+#set(CMAKE_USE_RELATIVE_PATHS true)
 include(GNUInstallDirs)
 
 set(PKGCONFIG_CONF_PATH "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
-set(CMAKE_INSTALL_PREFIX "/usr")
+#set(CMAKE_INSTALL_PREFIX "/usr")
 
 set(pw_NAME "lib${PROJECT_NAME}")
 set(pw_VENDOR "(c) SK PLANET")
@@ -50,14 +50,14 @@ else ()
 endif()
 set(pw_VERSION "${pw_VERSION_MAJOR}.${pw_VERSION_MINOR}.${pw_VERSION_PATCH}")
 set(pw_DESCRIPTION_SUMMARY "PW library")
-set(pw_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../DESCRIPTION")
+set(pw_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../DESCRIPTION")
 file(READ ${pw_DESCRIPTION_FILE} pw_DESCRIPTION_DATA)
 set(pw_URL "http://github.com/skplanet/libpw/")
 set(pw_LICENSE "MIT")
-set(pw_LICENSE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE")
+set(pw_LICENSE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE")
 file(READ ${pw_LICENSE_FILE} pw_LICENSE_DATA)
 set(pw_GROUP "Development/Libraries/C and C++")
-set(pw_CHANGELOG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../ChangeLog")
+set(pw_CHANGELOG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../ChangeLog")
 file(READ ${pw_CHANGELOG_FILE} pw_CHANGELOG_DATA)
 
 set(RPMBUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild)
@@ -137,10 +137,10 @@ set_target_properties(pw_static
 		SOVERSION ${pw_VERSION_MAJOR}
 		OUTPUT_NAME pw)
 
-target_link_libraries(pw_shared
-	-lstdc++
-	/usr/local/lib/libjsoncpp.dylib
-	${PW_ADDITIONAL_LIBS})
+# target_link_libraries(pw_shared
+# 	-lstdc++
+# 	/usr/local/lib/libjsoncpp.dylib
+# 	${PW_ADDITIONAL_LIBS})
 
 install(TARGETS pw_static pw_shared
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -151,8 +151,8 @@ install(FILES ${HDRS}
 
 install(FILES
 	${pw_LICENSE_FILE} ${pw_DESCRIPTION_FILE} ${pw_CHANGELOG_FILE}
-	${CMAKE_CURRENT_SOURCE_DIR}/../CONTRIBUTORS.md
-	${CMAKE_CURRENT_SOURCE_DIR}/../README.md
+	${libpw_top_SOURCE_DIR}/CONTRIBUTORS.md
+	${libpw_top_SOURCE_DIR}/README.md
 	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/libpw)
 
 install(FILES
@@ -167,3 +167,7 @@ message(STATUS "Libraries(PWLIBS): ${PWLIBS}")
 message(STATUS "Libraries for static(PWLIBS_STATIC): ${PWLIBS_STATIC}")
 message(STATUS "Libraries for shared(PWLIBS_SHARED): ${PWLIBS_SHARED}")
 message(STATUS "Watch pw.pc(${CMAKE_CURRENT_BINARY_DIR}/pw.pc) for building flags")
+
+# Installation test...
+# add_custom_target(.instbin DESTDIR=${libpw_top_BINARY_DIR} make install 2>&1 > /dev/null
+# 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

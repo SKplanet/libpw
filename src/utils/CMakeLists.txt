@@ -24,3 +24,4 @@
 # \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
 # \license This project is released under the MIT License.
 
+add_subdirectory(genprj)
