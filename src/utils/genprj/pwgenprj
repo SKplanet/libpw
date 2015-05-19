@@ -1,0 +1,82 @@
+#!/bin/sh
+
+NOW=$(date +"%Y/%m/%d %H:%M:%S")
+NOW_E=$(date +"%Y\/%m\/%d %H:%M:%S")
+
+# Parsing arguments...
+PROG_NAME=$(basename $0)
+PROG_DIR=$(dirname $0)
+if [ -z "$2" ]
+then
+	echo "${PROG_NAME} [TYPE] [NAME] ([BASE_DIR])"
+	echo "TYPE: Daemon or Application"
+	echo "NAME: Target name"
+	echo "BASE_DIR: Target base directory"
+	exit 1
+fi
+
+TYPE=$(echo $1 | awk '{print toupper($0)}')
+NAME=$2
+
+if [ -z "$3" ]
+then
+	BASE_DIR=./${NAME}
+else
+	BASE_DIR=$3
+fi
+
+case ${TYPE} in
+DAEMON)
+	TYPE=daemon
+	;;
+D)
+	TYPE=daemon
+	;;
+APPLICATION)
+	TYPE=application
+	;;
+A)
+	TYPE=application
+	;;
+*)
+	echo "ERROR: invalid type" >&2
+	exit 1
+esac
+
+# Copying...
+mkdir -p "${BASE_DIR}" 2>&1 > /dev/null
+if [ $? -ne 0 ]
+then
+	echo "ERROR: failed to make directory" >&2
+	exit 1
+fi
+
+FILES=$(find "${PROG_DIR}/data/${TYPE}/" -type f | egrep '\.cpp$|\.h$|\.md$|CMakeLists\.txt')
+#echo $FILES
+
+for FILE in $FILES
+do
+	TARGET=$(echo $FILE | sed -e "s/.*\/data\/${TYPE}\///g")
+	TARGET_BASE_DIR=$(dirname $TARGET)
+	
+	if [ -n "${TARGET_BASE_DIR}" ]
+	then
+		mkdir -p "${BASE_DIR}/${TARGET_BASE_DIR}" 2>&1 > /dev/null
+		if [ $? -ne 0 ]
+		then
+			echo "ERROR: failed to make directory: ${BASE_DIR}/${TARGET_BASE_DIR}" >&2
+			exit 1
+		fi
+	fi
+	
+	sed -r -e "s/__PWTEMPLATE_NAME__/${NAME}/g
+	s/__PWTEMPLATE_DATE__/${NOW_E}/g" "${FILE}" > ${BASE_DIR}/${TARGET}
+	if [ $? -ne 0 ]
+	then
+		echo "ERROR: failed to copy: ${BASE_DIR}/${TARGET_BASE_DIR}" >&2
+		exit 1
+	fi
+
+	echo "Copying: ${TARGET}"
+done
+
