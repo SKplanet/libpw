@@ -10,7 +10,7 @@ set(${PROJECT_NAME}_NAME ${PROJECT_NAME})
 set(${PROJECT_NAME}_VENDOR "VENDOR NAME HERE")
 set(${PROJECT_NAME}_CONTACT "CONTACT HERE")
 set(${PROJECT_NAME}_LICENSE "LICENSE HERE")
-set(${PROJECT_NAME}_GROUP "System Environment/Daemons")
+set(${PROJECT_NAME}_GROUP "Applications/File")
 set(${PROJECT_NAME}_VERSION_MAJOR 1)
 set(${PROJECT_NAME}_VERSION_MINOR 0)
 set(${PROJECT_NAME}_VERSION_PATCH 1)
@@ -28,9 +28,8 @@ endif()
 set(INST_PREFIX ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME})
 
 # Configuration file...
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini)
+#configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini)
 
-# Version...
 add_definitions(-DVERSION_MAJOR=${${PROJECT_NAME}_VERSION_MAJOR})
 add_definitions(-DVERSION_MINOR=${${PROJECT_NAME}_VERSION_MINOR})
 add_definitions(-DVERSION_PATCH=${${PROJECT_NAME}_VERSION_PATCH})
@@ -39,7 +38,6 @@ add_definitions(-DVERSION="${${PROJECT_NAME}_VERSION}")
 
 # Subdirectories...
 add_subdirectory(src)
-add_subdirectory(keys)
 
 # Installation...
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/config.ini DESTINATION ${INST_PREFIX})
+#install(FILES ${CMAKE_CURRENT_BINARY_DIR}/config.ini DESTINATION ${INST_PREFIX})
