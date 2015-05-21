@@ -40,3 +40,7 @@ add_custom_target(${CERT_TARGET} ALL
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
 
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/intermediate.pem
+	${CMAKE_CURRENT_BINARY_DIR}/certificate.pem
+	${CMAKE_CURRENT_BINARY_DIR}/privatekey.pem
+	DESTINATION ${INST_PREFIX}/keys)

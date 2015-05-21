@@ -24,3 +24,8 @@ add_executable(${TARGET}
 add_definitions(${PW_CFLAGS})
 
 target_link_libraries(${TARGET} ${PW_LIBRARIES})
+
+# Install target to lib/__PWTEMPLATE_NAME__/
+install(TARGETS ${TARGET} RUNTIME DESTINATION ${INST_PREFIX})
+
+include(CPack)

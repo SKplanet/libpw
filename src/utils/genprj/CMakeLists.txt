@@ -25,4 +25,17 @@
 # \license This project is released under the MIT License.
 
 project(genprj)
+cmake_minimum_required(VERSION 3.0)
+include(GNUInstallDirs)
 
+install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/bin/pwgenprj
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pwgenprj/bin)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/pwgenprj
+	FILES_MATCHING REGEX ".md$|.h$|.cpp$|.txt$|.ini$|gitignore"
+	PATTERN "build" EXCLUDE
+	PATTERN ".kdev*" EXCLUDE
+	PATTERN "CMakeFiles" EXCLUDE)
+
+include(CPack)
