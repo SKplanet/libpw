@@ -86,12 +86,17 @@ bool MyInstance::eventConfig(bool isDefault, bool isReload)
 		return false;
 	}
 
+	// Load additional log...
+	// this->reloadLog(pw::Log, CONF, PREFIX, TAG, SECTION)
+	//if ( not reloadLog(m_log_XXX, CONF, "XXX", "log.XXX", "main") ) { ... }
+
 	return true;
 }
 
 bool MyInstance::eventInitLog(void)
 {
 	//! \todo Initialize log objects...
+
 	return true;
 }
 

@@ -11,6 +11,7 @@
 #ifndef MYLISTENER_H
 #define MYLISTENER_H
 
+//! \brief Service listener
 class ServiceListener final : public pw::ListenerInterface
 {
 public:
@@ -23,6 +24,7 @@ private:
 	bool eventAccept(const accept_type& param) override;
 };
 
+//! \brief Admin listener
 class AdminListener final : public pw::ListenerInterface
 {
 public:
@@ -35,6 +37,7 @@ private:
 	bool eventAccept(const accept_type& param) override;
 };
 
+//! \brief Child listener for multi process
 class ChildListener final : public pw::ChildListenerInterface
 {
 public:
