@@ -39,17 +39,27 @@ bool AdminListener::eventAccept(const accept_type& param)
 
 //------------------------------------------------------------------------
 // Child Listener
+bool ChildListener::eventSetParameters(accept_type& param)
+{
+	if ( param.type == LT_ADMIN_SSL )
+	{
+		if ( nullptr == (param.ssl = getNewSsl()) ) return false;
+	}
+
+	return true;
+}
+
 bool ChildListener::eventAccept(const accept_type& param)
 {
 	pw::chif_create_type cparam;
 	cparam.fd = param.fd;
 	cparam.poller = getIoPoller();
-	cparam.ssl = param.ssl;
+	//cparam.ssl = param.ssl;
 
 	pw::ChannelInterface* ch(nullptr);
 
 	if ( param.type == LT_SERVICE ) ch = new ServiceChannel(cparam);
-	else if ( param.type == LT_ADMIN ) ch = new AdminChannel(cparam);
+	else if ( (param.type == LT_ADMIN) or (param.type == LT_ADMIN_SSL) ) ch = new AdminChannel(cparam);
 
 	return ch not_eq nullptr;
 }

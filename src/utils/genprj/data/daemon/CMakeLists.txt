@@ -4,6 +4,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(__PWTEMPLATE_NAME__ CXX)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.ini ${CMAKE_CURRENT_BINARY_DIR})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini)
 
 add_subdirectory(src)
+add_subdirectory(keys)

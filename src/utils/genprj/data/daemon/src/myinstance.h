@@ -43,9 +43,16 @@ public:
     string m_test_string;
     int m_test_integer;
 
+	pw::ssl::context_type m_tls_server; //!< TLS context for server mode.
+
 public:
 	//----------------------------------------------------------------------
 	// Custom methods...
+
+	pw::SslContext* getListenSslContext(const string& name) const override
+	{
+		return ( name == TAG_ADMIN_SSL ? m_tls_server.ctx : nullptr );
+	}
 
 private:
 	//----------------------------------------------------------------------

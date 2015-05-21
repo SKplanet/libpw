@@ -42,6 +42,7 @@ public:
 	inline virtual ~ChildListener() {}
 
 private:
+	bool eventSetParameters(accept_type& param) override;
 	bool eventAccept(const accept_type& param) override;
 };
 

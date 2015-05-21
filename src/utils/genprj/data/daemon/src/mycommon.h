@@ -12,10 +12,17 @@
 #define MYCOMMON_H
 
 #include <pw/pwlib.h>
+// for your finger health...
+using namespace pw;
 
+//! \brief Application name.
 constexpr auto g_name = "__PWTEMPLATE_NAME__";
+
+//! \brief Start timestamp.
 constexpr auto g_start = "__PWTEMPLATE_DATE__";
 
+//! \brief Additional service tags...
+constexpr auto TAG_ADMIN_SSL = "admin.ssl";
 
 // Local headers...
 #include "./myinstance.h"

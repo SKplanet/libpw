@@ -70,10 +70,21 @@ bool MyInstance::eventConfig(bool isDefault, bool isReload)
 	if ( not isReload ) // First call!
 	{
 		m_test_integer = CONF.getInteger("test.integer", sec, this->m_test_integer);
+
+		/* Add new service here */
+		if ( not loadPort(TAG_ADMIN_SSL, sec) ) logError(__FILE__, __LINE__, "failed to load %s.port", TAG_ADMIN_SSL);
 	}
 
 	CONF.getString2(m_test_string, "test.string", sec, m_test_string);
 	} while (false);
+
+	// Load certs...
+	// pw::ssl::context_type::read(CONF, "prefix", "section")
+	if ( not m_tls_server.read(CONF, "server", "tls") )
+	{
+		logError(__FILE__, __LINE__, "failed to load tls settings...");
+		return false;
+	}
 
 	return true;
 }
@@ -105,9 +116,12 @@ bool MyInstance::eventInitChannel(void)
 bool MyInstance::eventInitListenerSingle(void)
 {
 	//! \todo Initialize listener for single...
+
 	PWTRACE("%s %d", __func__, int(::getpid()));
 	if ( not openListenerSingle<ServiceListener>("svc") ) return false;
 	if ( not openListenerSingle<AdminListener>("admin") ) return false;
+	if ( not openListenerSingle<AdminListener>(TAG_ADMIN_SSL) ) return false;
+	/* Add new service here */
 
 	return true;
 }
@@ -115,9 +129,12 @@ bool MyInstance::eventInitListenerSingle(void)
 bool MyInstance::eventInitListenerParent(void)
 {
 	//! \todo Initialize listener for parent...
+
 	PWTRACE("%s %d", __func__, int(::getpid()));
 	if ( not this->openListenerParent<pw::ListenerInterface::LT_SERVICE>("svc") ) return false;
 	if ( not this->openListenerParent<pw::ListenerInterface::LT_ADMIN>("admin") ) return false;
+	if ( not this->openListenerParent<pw::ListenerInterface::LT_ADMIN_SSL>(TAG_ADMIN_SSL) ) return false;
+	/* Add new service here */
 
 	return true;
 }
@@ -125,10 +142,13 @@ bool MyInstance::eventInitListenerParent(void)
 bool MyInstance::eventInitListenerChild(void)
 {
 	//! \brief Initialize listener for children...
+
 	PWTRACE("%s %d", __func__, int(::getpid()));
 	return this->openListenerChild<ChildListener>(lsnr_names{
 			"svc",
-			"admin"
+			"admin",
+			TAG_ADMIN_SSL,
+			/* Add new service here */
 			});
 }
 
@@ -141,6 +161,7 @@ bool MyInstance::eventInitTimer(void)
 	pw::TimerAdd(this, TIMER::TEN_MIN, 10LL*60LL*1000LL);
 	pw::TimerAdd(this, TIMER::ONE_HOUR, 60LL*60LL*1000LL);
 	pw::TimerAdd(this, TIMER::ONE_DAY, 24LL*60LL*60LL*1000LL);
+	/* Add new timer events here */
 
 	return true;
 }
@@ -150,6 +171,6 @@ void MyInstance::eventForkCleanUpChannel(size_t index, void* param)
 	//! \todo Cleanup channels for fork...
 
 	do {
-		CentralChannel::s_destroy();
+	CentralChannel::s_destroy();
 	} while (false);
 }
