@@ -39,6 +39,13 @@
 
 #cmakedefine HAVE_CXX11	@HAVE_CXX11@
 
+#cmakedefine HAVE_CXX_TLS	@HAVE_CXX_TLS@
+#cmakedefine HAVE_GNU_TLS	@HAVE_GNU_TLS@
+
+#if !defined(HAVE_CXX_TLS) && defined(HAVE_GNU_TLS)
+#	define thread_local __thread
+#endif
+
 namespace pw {
 
 using LibraryVersion = enum class LibraryVersion : int

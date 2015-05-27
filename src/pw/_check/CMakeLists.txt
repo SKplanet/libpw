@@ -72,9 +72,27 @@ test_big_endian(WORDS_BIGENDIAN)
 
 # Check C++11
 set(CHECK_CXX11 "#include <unordered_map>
-int main() { thread_local std::unordered_map<int, int> cont; auto itr = cont.find(10); return 0; }" )
+#include <algorithm>
+int main() {
+	std::unordered_map<int, int> cont;
+	std::find_if(cont.begin(), cont.end(), [] (decltype(*cont.begin()) x) {
+		return false;
+	});
+	for ( auto& i : cont ) { }
+	return 0;
+}" )
 set(CHECK_TIMED_MUTEX "#include <mutex>
 int main() { std::timed_mutex lock; return 0; }")
+set(CHECK_CXX11_TLS "#include <thread>
+thread_local int g_int = 0;
+int main() { int l_int = g_int; return 0; }")
+set(CHECK_GNU_TLS "#include <thread>
+__thread int g_int = 0;
+int main() { int l_int = g_int; return 0; }")
+set(CHECK_CXX11_LAMBDA "#include <unordered_map>
+#include <algorithm>
+std::unordered_map<int, int> cont;
+int main() { std::find_if(cont.begin(), cont.end(), [] (decltype(*cont.begin()) x) { return false; }); }")
 
 set(save_flags ${CMAKE_REQUIRED_FLAGS})
 set(save_defs ${CMAKE_REQUIRED_DEFINITIONS})
@@ -84,12 +102,22 @@ set(CMAKE_REQUIRED_DEFINITIONS -D_REENTRANT)
 set(CMAKE_REQUIRED_LIBRARIES pthread)
 check_cxx_source_compiles("${CHECK_CXX11}" HAVE_CXX11)
 check_cxx_source_compiles("${CHECK_TIMED_MUTEX}" HAVE_TIMED_MUTEX)
+check_cxx_source_compiles("${CHECK_CXX11_TLS}" HAVE_CXX11_TLS)
+check_cxx_source_compiles("${CHECK_GNU_TLS}" HAVE_GNU_TLS)
 set(CMAKE_REQUIRED_FLAGS ${save_flags})
 set(CMAKE_REQUIRED_DEFINITIONS ${save_defs})
 set(CMAKE_REQUIRED_LIBRARIES ${save_libs})
 
+if( NOT "${HAVE_CXX11}" )
+	message(FATAL_ERROR "PW library needs C++11 standard.")
+endif()
+
+if( NOT "${HAVE_CXX_TLS}" AND NOT "${HAVE_GNU_TLS}" )
+	message(FATAL_ERROR "PW library needs TLS.")
+endif()
+
 if (HAVE_CXX11)
-	set(CXXFLAGS_STD "-std=c++11")
+	set(CXXFLAGS_STD "-std=c++11 -stdlib=libc++")
 	set(CXXFLAGS_THREAD "-D_REENTRANT -pthread")
 else()
 	message(FATAL_ERROR "libpw needs C++11 standard")

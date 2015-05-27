@@ -85,6 +85,11 @@ bool MyInstance::eventConfig(bool isDefault, bool isReload)
 		logError(__FILE__, __LINE__, "failed to load tls settings...");
 		return false;
 	}
+	else
+	{
+		auto admin_ssl_lsnr(this->getListener(TAG_ADMIN_SSL));
+		if ( admin_ssl_lsnr ) admin_ssl_lsnr->setSslContext(m_tls_server.ctx);
+	}
 
 	// Load additional log...
 	// this->reloadLog(pw::Log, CONF, PREFIX, TAG, SECTION)
