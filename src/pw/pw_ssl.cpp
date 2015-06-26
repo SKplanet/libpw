@@ -1003,6 +1003,13 @@ context_type::read(const Ini& conf, const char* prefix, Ini::sec_citr sec)
 
 		this->swap(tmp);
 
+		// Keep wrapper class pointer.
+		if ( (tmp.ctx != nullptr) and (this->ctx != nullptr) )
+		{
+			std::swap(tmp.ctx, this->ctx);
+			this->ctx->swap(*tmp.ctx);
+		}
+
 		return true;
 	} while (false);
 	return false;
