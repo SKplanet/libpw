@@ -10,6 +10,10 @@ unix:remake-build-dir
 remake-build-dir:
 	$(RM) -rf build;\
 	mkdir build
+
+codelite:remake-build-dir
+	cd build;\
+	$(CMAKE) -G"CodeLite - Unix Makefiles" ../src
 	
 gcc49:remake-build-dir
 	cd build;\

@@ -24,6 +24,8 @@
 # \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
 # \license This project is released under the MIT License.
 
+cmake_minimum_required(VERSION 3.0)
+
 # Library
 add_subdirectory(pw)
 
