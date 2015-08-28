@@ -34,3 +34,5 @@ pwlib_config.h
 # IDE
 *.kdev4
 .kdev4
+.project
+.cproject

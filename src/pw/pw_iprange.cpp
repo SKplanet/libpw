@@ -615,6 +615,7 @@ IpRange::writeAsJson ( const char* fn, const char* rootname ) const
 	return false;
 }
 
+#if HAVE_SQLITE3
 template<size_t ver, typename _ContType>
 void
 _insertSqlite(sqlite3* _handle, const _ContType& cont, const char* tablename)
@@ -639,6 +640,7 @@ _insertSqlite(sqlite3* _handle, const _ContType& cont, const char* tablename)
 		}
 	}
 }
+#endif
 
 bool
 IpRange::writeAsSqlite ( const char* fn, const char* tablename ) const
