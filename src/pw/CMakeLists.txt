@@ -42,7 +42,7 @@ set(pw_VENDOR "(c) SK PLANET")
 set(pw_CONTACT "purewell@sk.com")
 set(pw_VERSION_MAJOR 1)
 set(pw_VERSION_MINOR 0)
-set(pw_VERSION_PATCH 0)
+set(pw_VERSION_PATCH 2)
 if ( VERSION_COUNT )
 	set(pw_VERSION_RELEASE ${VERSION_COUNT})
 else ()
@@ -66,6 +66,9 @@ set(RPMSOURCE_FILE "libpw-${pw_VERSION}.tgz")
 
 set(PWCXXFLAGS -std=c++11 -D_REENTRANT -pthread  -Wall -fpermissive -fPIC
 	CACHE STRING "PW library C++ flags" FORCE)
+
+set(PW_PKGNAME_RPM "${pw_NAME}-${pw_VERSION}")
+set(PW_PKGNAME_DEB "${pw_NAME}-${pw_VERSION}")
 
 add_subdirectory(_check)
 
@@ -119,8 +122,8 @@ add_custom_target(libpw.rpm
 )
 
 add_custom_target(libpw.deb
-	COMMAND make DESTDIR=${CMAKE_CURRENT_BINARY_DIR}/debbuild install
-	COMMAND dpkg -b debbuild
+	COMMAND make DESTDIR=${CMAKE_CURRENT_BINARY_DIR}/${PW_PKGNAME_DEB} install
+	COMMAND dpkg -b ${PW_PKGNAME_DEB}
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	COMMENT "Install files for DEB..."
 )
@@ -136,11 +139,6 @@ set_target_properties(pw_static
 		VERSION ${pw_VERSION}
 		SOVERSION ${pw_VERSION_MAJOR}
 		OUTPUT_NAME pw)
-
-# target_link_libraries(pw_shared
-# 	-lstdc++
-# 	/usr/local/lib/libjsoncpp.dylib
-# 	${PW_ADDITIONAL_LIBS})
 
 install(TARGETS pw_static pw_shared
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

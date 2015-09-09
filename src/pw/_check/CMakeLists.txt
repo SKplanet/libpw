@@ -117,7 +117,7 @@ if( NOT "${HAVE_CXX_TLS}" AND NOT "${HAVE_GNU_TLS}" )
 endif()
 
 if (HAVE_CXX11)
-	set(CXXFLAGS_STD "-std=c++11 -stdlib=libc++")
+	set(CXXFLAGS_STD "-std=c++11")
 	set(CXXFLAGS_THREAD "-D_REENTRANT -pthread")
 else()
 	message(FATAL_ERROR "libpw needs C++11 standard")
@@ -371,4 +371,4 @@ configure_file(pw.cmake.pc
 configure_file(libpw.cmake.spec
 	"${pw_BINARY_DIR}/libpw.spec" @ONLY)
 configure_file(control.cmake.in
-	"${pw_BINARY_DIR}/debbuild/DEBIAN/control" @ONLY)
+	"${pw_BINARY_DIR}/${PW_PKGNAME_DEB}/DEBIAN/control" @ONLY)
