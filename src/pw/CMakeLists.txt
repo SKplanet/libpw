@@ -28,6 +28,11 @@ cmake_minimum_required(VERSION 3.0)
 project(pw C CXX)
 include(GNUInstallDirs)
 
+if ("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr/local")
+	set(CMAKE_INSTALL_PREFIX "/usr")
+endif()
+#message(STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
+
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
