@@ -24,6 +24,8 @@
 # \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
 # \license This project is released under the MIT License.
 
+enable_language(C CXX)
+include(GNUInstallDirs)
 include(CheckIncludeFile)
 include(CheckFunctionExists)
 include(CheckTypeSize)
@@ -358,9 +360,18 @@ set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "Addtional inc
 message(STATUS "Additional libraries: ${PW_ADDITIONAL_LIBS}")
 message(STATUS "Additional include directories: ${PW_ADDITIONAL_INC_DIRS}")
 
-execute_process(COMMAND dpkg --print-architecture
-	OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
-	OUTPUT_STRIP_TRAILING_WHITESPACE)
+find_program(PW_HAVE_RPM rpm)
+if ( PW_HAVE_RPM )
+  set(PW_HAVE_RPM ${PW_HAVE_RPM} CACHE BOOL "Have RPM")
+endif ()
+
+find_program(PW_HAVE_DPKG dpkg)
+if ( PW_HAVE_DPKG )
+  set(PW_HAVE_DPKG ${PW_HAVE_DPKG} CACHE BOOL "Have DPKG")
+  execute_process(COMMAND dpkg --print-architecture
+	  OUTPUT_VARIABLE CPACK_DEBIAN_PACKAGE_ARCHITECTURE
+	  OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif ()
 
 configure_file(pwlib_config.cmake.h
 	"${pw_SOURCE_DIR}/pwlib_config.h" @ONLY)
@@ -370,5 +381,8 @@ configure_file(pw.cmake.pc
 	"${pw_BINARY_DIR}/pw.pc" @ONLY)
 configure_file(libpw.cmake.spec
 	"${pw_BINARY_DIR}/libpw.spec" @ONLY)
-configure_file(control.cmake.in
-	"${pw_BINARY_DIR}/${PW_PKGNAME_DEB}/DEBIAN/control" @ONLY)
+	
+if (PW_HAVE_DPKG)
+  configure_file(control.cmake.in
+	  "${pw_BINARY_DIR}/${PW_PKGNAME_DEB}/DEBIAN/control" @ONLY)
+endif ()	  

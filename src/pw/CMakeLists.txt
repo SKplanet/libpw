@@ -26,16 +26,13 @@
 
 cmake_minimum_required(VERSION 3.0)
 project(pw C CXX)
+include(GNUInstallDirs)
 
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
-#set(CMAKE_USE_RELATIVE_PATHS true)
-include(GNUInstallDirs)
-
 set(PKGCONFIG_CONF_PATH "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
-#set(CMAKE_INSTALL_PREFIX "/usr")
 
 set(pw_NAME "lib${PROJECT_NAME}")
 set(pw_VENDOR "(c) SK PLANET")
@@ -115,18 +112,22 @@ add_custom_target(doc
 	COMMAND doxygen ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
-add_custom_target(libpw.rpm
-	COMMAND rpmbuild -bb --define "_topdir ${RPMBUILD_DIR}" --buildroot="${RPMBUILDROOT_DIR}" ${CMAKE_CURRENT_BINARY_DIR}/libpw.spec
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	COMMENT "Install files for RPM..."
-)
+if (PW_HAVE_RPM)
+  add_custom_target(libpw.rpm
+	  COMMAND rpmbuild -bb --define "_topdir ${RPMBUILD_DIR}" --buildroot="${RPMBUILDROOT_DIR}" ${CMAKE_CURRENT_BINARY_DIR}/libpw.spec
+	  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	  COMMENT "Install files for RPM..."
+  )
+endif()
 
-add_custom_target(libpw.deb
-	COMMAND make DESTDIR=${CMAKE_CURRENT_BINARY_DIR}/${PW_PKGNAME_DEB} install
-	COMMAND dpkg -b ${PW_PKGNAME_DEB}
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	COMMENT "Install files for DEB..."
-)
+if (PW_HAVE_DPKG)
+  add_custom_target(libpw.deb
+	  COMMAND make DESTDIR=${CMAKE_CURRENT_BINARY_DIR}/${PW_PKGNAME_DEB} install
+	  COMMAND dpkg -b ${PW_PKGNAME_DEB}
+	  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	  COMMENT "Install files for DEB..."
+  )
+endif()
 
 set_target_properties(pw_shared
 	PROPERTIES
