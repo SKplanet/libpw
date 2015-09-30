@@ -39,11 +39,15 @@ bool getOpts(int argc, char* argv[])
 		}//case 'v'
 		}//switch(opt)
 	}// while
+	
+	return true;
 }
 
 int main(int argc, char* argv[])
 {
 	PWINIT();
+	// Uncomment for using SSL
+	//pw::ssl::initialize();
 	pw::Log::s_setTrace(false);
 
 	if ( not getOpts(argc, argv) ) return EXIT_FAILURE;
