@@ -7,7 +7,7 @@ Summary: @pw_DESCRIPTION_SUMMARY@
 Group: @pw_GROUP@
 License: @pw_LICENSE@
 URL: @pw_URL@
-Requires: openssl, zlib, libjsoncpp.so, liburiparser.so
+Requires: openssl, zlib, jsoncpp, uriparser
 BuildRequires: cmake >= 3.0
 Source: %{name}-%{version}.tgz
 
