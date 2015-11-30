@@ -69,6 +69,7 @@ using LibraryVersion = enum class LibraryVersion : int
 #cmakedefine	HAVE_DOPRNT		@HAVE_DOPRNT@
 #cmakedefine	HAVE_DUP2		@HAVE_DUP2@
 #cmakedefine	HAVE_EPOLL		@HAVE_EPOLL@
+#cmakedefine	HAVE_EPOLL_CREATE1	@HAVE_EPOLL_CREATE1@
 #cmakedefine	HAVE_FCNTL_H		@HAVE_FCNTL_H@
 #cmakedefine	HAVE_FDATASYNC		@HAVE_FDATASYNC@
 #cmakedefine	HAVE_FMODL		@HAVE_FMODL@

@@ -179,7 +179,11 @@ IoPoller_Epoll::dispatch(int timeout_msec)
 bool
 IoPoller_Epoll::initialize(void)
 {
+#ifdef HAVE_EPOLL_CREATE1
+	int epoll_fd(epoll_create1(0));
+#else
 	int epoll_fd(epoll_create(MAX_EVENT_SIZE));
+#endif
 	if ( -1 == epoll_fd )
 	{
 		PWLOGLIB("failed to initialize epoll: %s", strerror(errno));
