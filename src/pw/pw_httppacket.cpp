@@ -709,7 +709,7 @@ HttpResponsePacket::swap(HttpResponsePacket& pk)
 std::string&
 HttpResponsePacket::writeFirstLine(std::string& ostr) const
 {
-	PWStr::format(ostr, "%s %d %s\r\n", http::toStringA(m_version), m_res_code, m_res_mesg.c_str());
+	PWStr::format(ostr, "%s %d %s\r\n", http::toStringA(m_version), int(m_res_code), m_res_mesg.c_str());
 	return ostr;
 }
 

@@ -288,7 +288,7 @@ ChannelInterface::handshakeEx(void)
 {
 	if ( not isConnSslHandShaking() )
 	{
-		PWLOGLIB("connection status is not ex handshaking: this:%p fd:%d conn_state:%d", this, m_fd, m_conn_state);
+		PWLOGLIB("connection status is not ex handshaking: this:%p fd:%d conn_state:%d", this, m_fd, int(m_conn_state));
 		return false;
 	}
 
@@ -422,7 +422,7 @@ ChannelInterface::handshakeSsl(Error* errpos)
 {
 	if ( not isConnSslHandShaking() )
 	{
-		PWLOGLIB("connection status is not ssl handshaking: this:%p fd:%d conn_state:%d", this, m_fd, m_conn_state);
+		PWLOGLIB("connection status is not ssl handshaking: this:%p fd:%d conn_state:%d", this, m_fd, int(m_conn_state));
 		return false;
 	}
 
@@ -474,7 +474,7 @@ ChannelInterface::procConnect(const char* host, const char* service, int family,
 {
 	if ( isConnSuccess() or isConnSend() or (m_fd >= 0) )
 	{
-		PWLOGLIB("confused connection state: this:%p conn_state:%d fd:%d", this, m_conn_state, m_fd);
+		PWLOGLIB("confused connection state: this:%p fd:%d conn_state:%d", this, m_fd, int(m_conn_state));
 		return false;
 	}
 

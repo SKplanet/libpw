@@ -77,7 +77,7 @@ bool _toValue<uint128_t>(uint128_t& out, const char* in)
 template<>
 std::string _toString<uint32_t>(uint32_t v)
 {
-	thread_local static char buf[INET_ADDRSTRLEN+1];
+	static thread_local char buf[INET_ADDRSTRLEN+1];
 	inet_ntop(AF_INET, &v, buf, sizeof(buf));
 	return std::string(buf);
 }
@@ -86,7 +86,7 @@ std::string _toString<uint32_t>(uint32_t v)
 template<>
 std::string _toString<uint128_t>(uint128_t v)
 {
-	thread_local static char buf[INET6_ADDRSTRLEN+1];
+	static thread_local char buf[INET6_ADDRSTRLEN+1];
 	inet_ntop(AF_INET6, &v, buf, sizeof(buf));
 	return std::string(buf);
 }
