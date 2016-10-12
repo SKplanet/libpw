@@ -25,6 +25,7 @@
 # \license This project is released under the MIT License.
 
 cmake_minimum_required(VERSION 3.0)
+set(CXX_STANDARD_REQUIRED 11)
 
 # Library
 add_subdirectory(pw)
