@@ -1,5 +1,7 @@
 CMAKE=cmake -DCMAKE_BUILD_TYPE=Release
 
+help: all
+
 all:
 	@echo "make [unix|gcc49|eclipse|xcode|clean|eclipse]" 
 
