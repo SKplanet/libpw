@@ -61,6 +61,8 @@ file(READ ${pw_LICENSE_FILE} pw_LICENSE_DATA)
 set(pw_GROUP "Development/Libraries/C and C++")
 set(pw_CHANGELOG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../ChangeLog")
 file(READ ${pw_CHANGELOG_FILE} pw_CHANGELOG_DATA)
+set(pw_README_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../README.md")
+set(pw_CONTRIBUTORS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../CONTRIBUTORS.md")
 
 set(RPMBUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild)
 set(RPMBUILDROOT_DIR ${RPMBUILD_DIR}/BUILDROOT)
@@ -155,8 +157,7 @@ install(FILES ${HDRS}
 
 install(FILES
 	${pw_LICENSE_FILE} ${pw_DESCRIPTION_FILE} ${pw_CHANGELOG_FILE}
-	${libpw_top_SOURCE_DIR}/CONTRIBUTORS.md
-	${libpw_top_SOURCE_DIR}/README.md
+	${pw_CONTRIBUTORS_FILE}	${pw_README_FILE}
 	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/doc/libpw)
 
 install(FILES
@@ -165,7 +166,7 @@ install(FILES
 
 include(CPack)
 
-# Infomation messages...
+# Information messages...
 message(STATUS "Include directories(PWINC_DIRS): ${PWINC_DIRS}")
 message(STATUS "Libraries(PWLIBS): ${PWLIBS}")
 message(STATUS "Libraries for static(PWLIBS_STATIC): ${PWLIBS_STATIC}")

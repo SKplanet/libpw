@@ -1,9 +1,14 @@
 CMAKE=cmake -DCMAKE_BUILD_TYPE=Release
 
+ifndef ECLIPSE_VERSION
+ECLIPSE_VERSION=3.6
+endif
+
 help: all
 
 all:
-	@echo "make [unix|gcc49|eclipse|xcode|clean|eclipse]" 
+	@echo "make [unix|gcc49|eclipse|xcode|clean|eclipse]";\
+	echo "ex) ECLIPSE_VERSION=4.7 make eclipse"
 
 unix:remake-build-dir
 	cd build;\
@@ -23,7 +28,9 @@ gcc49:remake-build-dir
 
 eclipse:remake-build-dir
 	cd build;\
-	$(CMAKE) -G"Eclipse CDT4 - Unix Makefiles" ../src
+	$(CMAKE) -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
+		-DCMAKE_ECLIPSE_VERSION=$(ECLIPSE_VERSION) \
+		-G"Eclipse CDT4 - Unix Makefiles" ../src
 
 xcode:remake-build-dir
 	cd build;\
