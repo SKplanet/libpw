@@ -1,3 +1,5 @@
 .cproject
 .project
 *.kdev4
+build/
+*.swp
