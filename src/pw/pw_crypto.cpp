@@ -266,6 +266,45 @@ initialize ( void )
 	_setCipher ( EVP_aes_192_ofb(), CipherType::AES_192_OFB );
 	_setCipher ( EVP_aes_256_ofb(), CipherType::AES_256_OFB );
 
+#ifdef HAVE_EVP_AES_256_CTR
+	_setCipher ( EVP_aes_128_ctr(), CipherType::AES_128_CTR );
+	_setCipher ( EVP_aes_192_ctr(), CipherType::AES_192_CTR );
+	_setCipher ( EVP_aes_256_ctr(), CipherType::AES_256_CTR );
+#endif
+
+#ifdef HAVE_EVP_AES_256_CCM
+	_setCipher ( EVP_aes_128_ccm(), CipherType::AES_128_CCM );
+	_setCipher ( EVP_aes_192_ccm(), CipherType::AES_192_CCM );
+	_setCipher ( EVP_aes_256_ccm(), CipherType::AES_256_CCM );
+#endif
+
+#ifdef HAVE_EVP_AES_256_GCM
+	_setCipher ( EVP_aes_128_gcm(), CipherType::AES_128_GCM );
+	_setCipher ( EVP_aes_192_gcm(), CipherType::AES_192_GCM );
+	_setCipher ( EVP_aes_256_gcm(), CipherType::AES_256_GCM );
+#endif
+
+#ifdef HAVE_EVP_AES_256_WRAP
+	_setCipher ( EVP_aes_128_wrap(), CipherType::AES_128_WRAP );
+	_setCipher ( EVP_aes_192_wrap(), CipherType::AES_192_WRAP );
+	_setCipher ( EVP_aes_256_wrap(), CipherType::AES_256_WRAP );
+#endif
+
+#ifdef HAVE_EVP_AES_256_XTS
+	_setCipher ( EVP_aes_128_wrap(), CipherType::AES_128_XTS );
+#ifdef HAVE_EVP_AES_192_XTS
+	_setCipher ( EVP_aes_192_wrap(), CipherType::AES_192_XTS );
+#endif
+	_setCipher ( EVP_aes_256_wrap(), CipherType::AES_256_XTS );
+#endif
+
+#ifdef HAVE_EVP_AES_256_CBC_HMAC_SHA256
+	_setCipher ( EVP_aes_128_cbc_hmac_sha1(), CipherType::AES_128_CBC_HMAC_SHA1 );
+	_setCipher ( EVP_aes_256_cbc_hmac_sha1(), CipherType::AES_256_CBC_HMAC_SHA1 );
+	_setCipher ( EVP_aes_128_cbc_hmac_sha256(), CipherType::AES_128_CBC_HMAC_SHA256 );
+	_setCipher ( EVP_aes_256_cbc_hmac_sha256(), CipherType::AES_256_CBC_HMAC_SHA256 );
+#endif
+
 	s_init = true;
 	return true;
 }
