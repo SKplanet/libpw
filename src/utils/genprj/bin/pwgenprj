@@ -52,7 +52,9 @@ then
 	exit 1
 fi
 
-FILES=$(find "${PROG_DIR}/../data/${TYPE}/" -type f | egrep '\.cpp$|\.h$|\.md$|\.ini$|CMakeLists\.txt')
+FILES=$(find "${PROG_DIR}/../data/${TYPE}/" -type f |
+	egrep '\.cpp$|\.h$|\.md$|\.ini$|CMakeLists\.txt|Makefile|config\.cmake' |
+	egrep -v 'build|\.swp$' )
 #echo $FILES
 
 for FILE in $FILES
