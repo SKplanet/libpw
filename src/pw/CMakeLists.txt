@@ -44,7 +44,7 @@ set(pw_VENDOR "(c) SK PLANET")
 set(pw_CONTACT "purewell@sk.com")
 set(pw_VERSION_MAJOR 1)
 set(pw_VERSION_MINOR 0)
-set(pw_VERSION_PATCH 3)
+set(pw_VERSION_PATCH 4)
 if ( VERSION_COUNT )
 	set(pw_VERSION_RELEASE ${VERSION_COUNT})
 else ()
@@ -176,3 +176,4 @@ message(STATUS "Watch pw.pc(${CMAKE_CURRENT_BINARY_DIR}/pw.pc) for building flag
 # Installation test...
 # add_custom_target(.instbin DESTDIR=${libpw_top_BINARY_DIR} make install 2>&1 > /dev/null
 # 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
