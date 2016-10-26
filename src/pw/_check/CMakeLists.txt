@@ -308,7 +308,7 @@ if (Boost_REGEX_FOUND)
 	set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${Boost_INCLUDE_DIRS})
 endif()
 
-pkg_search_module(URIPARSER REQUIRED QUIET uriparser liburiparser)
+pkg_search_module(URIPARSER QUIET uriparser liburiparser)
 if (URIPARSER_FOUND)
 	set(HAVE_URIPARSER 1)
 	set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} uriparser)

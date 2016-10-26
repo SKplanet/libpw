@@ -31,7 +31,10 @@
 #include "./pw_uri.h"
 #include "./pw_log.h"
 #include "./pw_httppacket.h"
-#include <uriparser/Uri.h>
+#include "./pw_exception.h"
+#ifdef HAVE_URIPARSER
+#	include <uriparser/Uri.h>
+#endif
 #include <netdb.h>
 
 #define _PWRELEASE(x) if (x) { delete(x); x = nullptr; }
@@ -40,9 +43,12 @@ namespace pw {
 
 using path_list = uri_type::path_list;
 using __str_ptr = uri_type::string_pointer;
+
+#ifdef HAVE_URIPARSER
 using __pathseg_ptr = UriPathSegmentA*;
 using __text_ptr = UriTextRangeA*;
 using __uri_ptr = UriUriA*;
+#endif
 
 template<typename _Type>
 static
@@ -53,54 +59,6 @@ _memClear(_Type& out)
 	memset(&out, 0x00, sizeof(_Type));
 	return out;
 }
-
-#if 0
-static
-std::ostream&
-operator << (std::ostream& os, const UriTextRangeA& in)
-{
-	if ( in.first and in.afterLast )
-	{
-		os.write(in.first, size_t(in.afterLast-in.first));
-	}
-	else
-	{
-		os.write("(nil)", 5);
-	}
-
-	return os;
-}
-
-static
-std::ostream&
-operator << (std::ostream& os, const UriPathSegmentA& in)
-{
-	operator << (os, in.text);
-	os << " next: " << in.next;
-	os << " reserved: " << in.reserved;
-	return os;
-}
-
-static
-std::ostream&
-operator << (std::ostream& os, const UriUriA& in)
-{
-	os << "scheme: " << in.scheme;
-	os << " userInfo: " << in.userInfo;
-	os << " hostText: " << in.hostText;
-	//os << " hostData: " << in.hostData;
-	os << " portText: " << in.portText;
-	os << " pathHead: " << in.pathHead;
-	if ( in.pathHead ) os << ' ' << *(in.pathHead);
-	os << " pathTail: " << in.pathTail;
-	os << " query: " << in.query;
-	os << " fragment: " << in.fragment;
-	os << " absolutePath: " << in.absolutePath;
-	os << " owner: " << in.owner;
-	os << " reserved: " << in.reserved;
-	return os;
-}
-#endif
 
 static
 inline
@@ -129,6 +87,7 @@ static
 const char*
 _getErrorMessage(int err)
 {
+#ifdef HAVE_URIPARSER
 	switch(err)
 	{
 		case URI_SUCCESS: return "Success";
@@ -143,10 +102,11 @@ _getErrorMessage(int err)
 		case URI_ERROR_REMOVEBASE_REL_SOURCE:
 			return "Given base is not absolute";
 	}
-
+#endif
 	return "Unknown";
 }
 
+#ifdef HAVE_URIPARSER
 inline
 static
 void
@@ -170,7 +130,9 @@ _assign(__str_ptr& out, const UriTextRangeA& in)
 
 	_PWRELEASE(out);
 }
+#endif
 
+#ifdef HAVE_URIPARSER
 inline
 static
 void
@@ -202,7 +164,9 @@ _assign(path_list& out, const UriPathSegmentA* head)
 		if ( p ) delete p;
 	}
 }
+#endif
 
+#ifdef HAVE_URIPARSER
 inline
 static
 void
@@ -217,7 +181,9 @@ _assign(UriTextRangeA& out, const std::string* in)
 
 	out.first = out.afterLast = nullptr;
 }
+#endif
 
+#ifdef HAVE_URIPARSER
 inline
 static
 __pathseg_ptr
@@ -227,7 +193,9 @@ _newPathSeg(void)
 	if ( p ) _memClear(*p);
 	return p;
 }
+#endif
 
+#ifdef HAVE_URIPARSER
 inline
 static
 void
@@ -271,6 +239,7 @@ _assign(__pathseg_ptr& head, __pathseg_ptr& tail, const path_list& in)
 
 	tail = tmp;
 }
+#endif
 
 static
 inline
@@ -312,7 +281,6 @@ uri_type::uri_type ( uri_type && obj )
 
 	data.path = std::move(obj.data.path);
 	data.isAbs = obj.data.isAbs;
-
 }
 
 uri_type&
@@ -353,6 +321,7 @@ uri_type::inner_type::clear ( void )
 void
 uri_type::_setFromData ( const void* _in )
 {
+#ifdef HAVE_URIPARSER
 	auto p(static_cast<const UriUriA*>(_in));
 	inner_type tmp;
 	_assign(tmp.scheme, p->scheme);
@@ -365,11 +334,15 @@ uri_type::_setFromData ( const void* _in )
 	tmp.isAbs = ( p->hostText.first ? bool(p->absolutePath) : false );
 
 	tmp.swap(data);
+#else
+	throw new Exception_not_implemented;
+#endif
 }
 
 void
 uri_type::_setToData ( void* _out ) const
 {
+#ifdef HAVE_URIPARSER
 	auto p(static_cast<UriUriA*>(_out));
 	_assign(p->scheme, data.scheme);
 	_assign(p->userInfo, data.userInfo);
@@ -381,11 +354,15 @@ uri_type::_setToData ( void* _out ) const
 	p->absolutePath = data.isAbs;
 	p->owner = false;
 	p->reserved = nullptr;
+#else
+	throw new Exception_not_implemented;
+#endif
 }
 
 bool
 uri_type::parse ( const char* s )
 {
+#ifdef HAVE_URIPARSER
 	UriUriA uri;
 	UriParserStateA state{&uri};
 
@@ -400,12 +377,14 @@ uri_type::parse ( const char* s )
 	PWTRACE("%s", _getErrorMessage(res));
 
 	uriFreeUriMembersA(&uri);
+#endif
 	return false;
 }
 
 bool
 uri_type::parse ( const char* s, size_t slen )
 {
+#ifdef HAVE_URIPARSER
 	UriUriA uri;
 	_memClear(uri);
 	UriParserStateA state{&uri};
@@ -421,6 +400,7 @@ uri_type::parse ( const char* s, size_t slen )
 	PWTRACE("%s", _getErrorMessage(res));
 
 	uriFreeUriMembersA(&uri);
+#endif
 	return false;
 }
 
@@ -498,6 +478,7 @@ uri_type::getPathString ( void ) const
 std::string&
 uri_type::str ( std::string& out ) const
 {
+#ifdef HAVE_URIPARSER
 	int cplen(0), res(0);
 	UriUriA uri;
 	_memClear(uri);
@@ -533,11 +514,15 @@ uri_type::str ( std::string& out ) const
 	uriFreeUriMembersA(&uri);
 
 	return out;
+#else
+	throw new Exception_not_implemented;
+#endif
 }
 
 bool
 uri_type::normalize ( void )
 {
+#ifdef HAVE_URIPARSER
 	UriUriA uri;
 	_memClear(uri);
 	_setToData(&uri);
@@ -555,12 +540,14 @@ uri_type::normalize ( void )
 	PWTRACE("uriNormalizeSyntaxExA: %s", _getErrorMessage(res));
 
 	uriFreeUriMembersA(&uri);
+#endif
 	return false;
 }
 
 bool
 uri_type::normalize( uri_type& out ) const
 {
+#ifdef HAVE_URIPARSER
 	UriUriA uri;
 	_memClear(uri);
 	_setToData(&uri);
@@ -579,7 +566,7 @@ uri_type::normalize( uri_type& out ) const
 
 	uriFreeUriMembersA(&uri);
 	out.clear();
-
+#endif
 	return false;
 }
 
@@ -648,6 +635,7 @@ uri_type::getQuery ( keyvalue_cont& out ) const
 bool
 uri_type::addBase ( uri_type& out, const uri_type& base ) const
 {
+#ifdef HAVE_URIPARSER
 	UriUriA out_uri, base_uri, this_uri;
 	_memClear(out_uri);
 	_memClear(base_uri);
@@ -672,12 +660,14 @@ uri_type::addBase ( uri_type& out, const uri_type& base ) const
 	out.clear();
 
 	PWTRACE("failed to addBase: %s", _getErrorMessage(res));
+#endif
 	return false;
 }
 
 bool
 uri_type::addBase ( const uri_type& base )
 {
+#ifdef HAVE_URIPARSER
 	UriUriA out_uri, base_uri, this_uri;
 	_memClear(out_uri);
 	_memClear(base_uri);
@@ -701,12 +691,14 @@ uri_type::addBase ( const uri_type& base )
 	uriFreeUriMembersA(&this_uri);
 
 	PWTRACE("failed to addBase: %s", _getErrorMessage(res));
+#endif
 	return false;
 }
 
 bool
 uri_type::removeBase ( uri_type& out, const uri_type& base, bool useDomainRoot ) const
 {
+#ifdef HAVE_URIPARSER
 	UriUriA out_uri, base_uri, this_uri;
 	_memClear(out_uri);
 	_memClear(base_uri);
@@ -731,12 +723,14 @@ uri_type::removeBase ( uri_type& out, const uri_type& base, bool useDomainRoot )
 	out.clear();
 
 	PWTRACE("failed to removeBase: %s", _getErrorMessage(res));
+#endif
 	return false;
 }
 
 bool
 uri_type::removeBase ( const uri_type& base, bool useDomainRoot )
 {
+#ifdef HAVE_URIPARSER
 	UriUriA out_uri, base_uri, this_uri;
 	_memClear(out_uri);
 	_memClear(base_uri);
@@ -760,6 +754,7 @@ uri_type::removeBase ( const uri_type& base, bool useDomainRoot )
 	uriFreeUriMembersA(&this_uri);
 
 	PWTRACE("failed to removeBase: %s", _getErrorMessage(res));
+#endif
 	return false;
 }
 

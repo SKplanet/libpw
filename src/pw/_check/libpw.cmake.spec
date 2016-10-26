@@ -1,5 +1,6 @@
 %global _enable_debug_package 1
 %global with_jsoncpp 0@HAVE_JSONCPP@
+%global with_uriparser 0@HAVE_URIPARSER@
 
 Name: @pw_NAME@
 Version: @pw_VERSION@
@@ -8,9 +9,12 @@ Summary: @pw_DESCRIPTION_SUMMARY@
 Group: @pw_GROUP@
 License: @pw_LICENSE@
 URL: @pw_URL@
-Requires: openssl, zlib, uriparser
+Requires: openssl, zlib
 %if 0%{with_jsoncpp}
 Requires: jsoncpp
+%endif
+%if 0%{with_uriparser}
+Requires: uriparser
 %endif
 BuildRequires: cmake >= 3.0
 Source: %{name}-%{version}.tgz
@@ -18,10 +22,14 @@ Source: %{name}-%{version}.tgz
 %package devel
 Summary: PW library headers
 Requires: @pw_NAME@ = @pw_VERSION@
-Requires: openssl-devel, zlib-devel, uriparser-devel
+Requires: openssl-devel, zlib-devel
 %if 0%{with_jsoncpp}
 Requires: jsoncpp-devel
 %endif
+%if 0%{with_uriparser}
+Requires: uriparser-devel
+%endif
+
 
 %package static
 Summary: PW static library
