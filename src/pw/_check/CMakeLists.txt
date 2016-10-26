@@ -315,7 +315,7 @@ if (URIPARSER_FOUND)
 	set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${URIPARSER_INCLUDE_DIRS})
 endif()
 
-pkg_search_module(JSONCPP REQUIRED QUIET jsoncpp libjsoncpp)
+pkg_search_module(JSONCPP QUIET jsoncpp libjsoncpp)
 if (JSONCPP_FOUND)
 	set(HAVE_JSONCPP 1)
 	set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} jsoncpp)

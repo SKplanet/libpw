@@ -571,6 +571,7 @@ IpRange::writeAsText (std::ostream& os) const
 	return true;
 }
 
+#ifdef HAVE_JSONCPP
 template<Json::Int ver, typename _ContType>
 void
 _writeJson(Json::Value& out, int& idx, const _ContType& cont)
@@ -585,6 +586,7 @@ _writeJson(Json::Value& out, int& idx, const _ContType& cont)
 		++idx;
 	}
 }
+#endif
 
 bool
 IpRange::writeAsJson ( std::ostream& os, const char* rootname ) const
