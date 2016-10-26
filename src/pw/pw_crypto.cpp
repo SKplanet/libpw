@@ -291,11 +291,11 @@ initialize ( void )
 #endif
 
 #ifdef HAVE_EVP_AES_256_XTS
-	_setCipher ( EVP_aes_128_wrap(), CipherType::AES_128_XTS );
+	_setCipher ( EVP_aes_128_xts(), CipherType::AES_128_XTS );
 #ifdef HAVE_EVP_AES_192_XTS
-	_setCipher ( EVP_aes_192_wrap(), CipherType::AES_192_XTS );
+	_setCipher ( EVP_aes_192_xts(), CipherType::AES_192_XTS );
 #endif
-	_setCipher ( EVP_aes_256_wrap(), CipherType::AES_256_XTS );
+	_setCipher ( EVP_aes_256_xts(), CipherType::AES_256_XTS );
 #endif
 
 #ifdef HAVE_EVP_AES_256_CBC_HMAC_SHA256
