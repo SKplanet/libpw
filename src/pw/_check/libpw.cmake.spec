@@ -1,4 +1,5 @@
 %global _enable_debug_package 1
+%global with_jsoncpp 0@HAVE_JSONCPP@
 
 Name: @pw_NAME@
 Version: @pw_VERSION@
@@ -7,14 +8,20 @@ Summary: @pw_DESCRIPTION_SUMMARY@
 Group: @pw_GROUP@
 License: @pw_LICENSE@
 URL: @pw_URL@
-Requires: openssl, zlib, jsoncpp, uriparser
+Requires: openssl, zlib, uriparser
+%if 0%{with_jsoncpp}
+Requires: jsoncpp
+%endif
 BuildRequires: cmake >= 3.0
 Source: %{name}-%{version}.tgz
 
 %package devel
 Summary: PW library headers
 Requires: @pw_NAME@ = @pw_VERSION@
-Requires: openssl-devel, zlib-devel, jsoncpp-devel, uriparser-devel
+Requires: openssl-devel, zlib-devel, uriparser-devel
+%if 0%{with_jsoncpp}
+Requires: jsoncpp-devel
+%endif
 
 %package static
 Summary: PW static library
@@ -37,7 +44,7 @@ PW static library
 %install
 rm -rf $RPM_BUILD_ROOT
 cd @pw_BINARY_DIR@
-make install DESTDIR=$RPM_BUILD_ROOT
+make %{?_smp_mflags} install DESTDIR=$RPM_BUILD_ROOT
 
 %files
 %{_libdir}/@pw_NAME@.so
