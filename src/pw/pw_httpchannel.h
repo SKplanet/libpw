@@ -199,7 +199,8 @@ public:
 	inline virtual ~HttpServerChannel() = default;
 
 protected:
-	virtual void eventReadFirstLine(http::Method method, const uri_type& uri, http::Version version) {}
+	using HttpChannelInterface::eventReadFirstLine;
+//	virtual void eventReadFirstLine(http::Method method, const uri_type& uri, http::Version version) {}
 
 	inline const HttpPacketInterface& getRecvPacket(void) const override final { return m_recv; }
 	inline HttpPacketInterface& getRecvPacket(void) override final { return m_recv; }

@@ -302,6 +302,7 @@ static constexpr uint8_t g_escape_dec_table2[] =
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
+#if 0
 inline
 static
 uint8_t
@@ -317,6 +318,7 @@ _Oct2Bin ( const uint8_t* v, int len )
 
 	return out;
 }
+#endif
 
 inline
 int
@@ -415,6 +417,7 @@ _Bin2HexFullLower ( uint8_t out[2], uint8_t in )
 	out[1] = _Bin2HexHalfLower ( in & uint8_t ( 0x0f ) );
 }
 
+#if 0
 inline
 static
 uint8_t
@@ -423,6 +426,7 @@ _Hex2BinFull ( const uint8_t in[2] )
 	//fprintf(stderr, "in: %c%c\n", (in[0]), (in[1]));
 	return ( _Hex2BinHalf ( in[0] ) << 4 | _Hex2BinHalf ( in[1] ) );
 }
+#endif
 
 template<uint8_t _PaddingChar>
 inline

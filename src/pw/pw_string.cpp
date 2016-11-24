@@ -75,6 +75,7 @@ static const char g_base36_table[36] = {'0', '1', '2', '3', '4', '5', '6', '7', 
 #define _rbegin(b,l)	((uint8_t*)(b)+(l)-1)
 #define _rend(b,l)		((uint8_t*)(b)-1)
 
+#if 0
 static
 inline
 size_t
@@ -89,6 +90,7 @@ _getUtf8Size(const uint8_t* ib, const uint8_t* ie)
 
 	return size_t(ib-s);
 }
+#endif
 
 static
 inline

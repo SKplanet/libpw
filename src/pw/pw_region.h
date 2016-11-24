@@ -44,7 +44,13 @@ class Ini;
 class Region
 {
 public:
-	inline static const Region& s_getInstance(void) { static const Region inst; return inst; }
+	Region() = default;
+
+//private:
+//	static const Region s_inst;
+
+public:
+	inline static const Region& s_getInstance(void) { static Region inst; return inst; }
 	static bool s_initialize(void);
 
 public:
