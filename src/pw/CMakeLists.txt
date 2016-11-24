@@ -115,6 +115,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR})
 add_library(pw_shared SHARED ${SRCS_ALL})
 add_library(pw_static STATIC ${SRCS_ALL})
 
+target_link_libraries(pw_shared ${PW_ADDITIONAL_LIBS})
+
 add_custom_target(doc
 	COMMAND doxygen ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
