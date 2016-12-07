@@ -345,6 +345,9 @@ set(CMAKE_EXTRA_INCLUDE_FILES "${OPENSSL_INCLUDE_DIR}/openssl/evp.h")
 set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
 check_type_size("EVP_CIPHER_CTX" HAVE_EVP_CIPHER_CTX)
 check_type_size("EVP_MD_CTX" HAVE_EVP_MD_CTX)
+if (OS_APPLE)
+	set(HAVE_EVP_MD_CTX 1)
+endif()
 check_function_exists("EVP_md2" HAVE_EVP_MD2)
 check_function_exists("EVP_PKEY_CTX_new_id" HAVE_EVP_PKEY_CTX_NEW_ID)
 check_function_exists("EVP_PKEY_new_mac_key" HAVE_EVP_PKEY_NEW_MAC_KEY)
@@ -389,6 +392,8 @@ configure_file(pw.cmake.pc
 	"${pw_BINARY_DIR}/pw.pc" @ONLY)
 configure_file(libpw.cmake.spec
 	"${pw_BINARY_DIR}/libpw.spec" @ONLY)
+configure_file(Info.cmake.plist
+	"${pw_SOURCE_DIR}/Info.plist" @ONLY)
 	
 if (PW_HAVE_DPKG)
   configure_file(control.cmake.in

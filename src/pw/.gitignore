@@ -1,6 +1,7 @@
 pw.pc
 pw_mq.pc
 pwlib_config.h
+Info.plist
 _test
 .cproject
 .project
