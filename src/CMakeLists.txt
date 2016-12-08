@@ -27,8 +27,17 @@
 cmake_minimum_required(VERSION 3.0)
 set(CXX_STANDARD_REQUIRED 11)
 
+# Custom command
+if ( PW_BUILD_TYPE )
+add_custom_target(distclean
+	COMMAND make ${PW_BUILD_TYPE} && exit
+	COMMENT Distclean
+	WORKING_DIRECTORY ../.. )
+endif()
+
 # Library
 add_subdirectory(pw)
 
 # Utilities
 add_subdirectory(utils)
+
