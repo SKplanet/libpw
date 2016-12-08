@@ -331,6 +331,12 @@ endif()
 # Add Zlib
 set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} z)
 
+# Add POSIX thread
+set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} pthread)
+
+# Add dynamic library loading
+set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} dl)
+
 # Check OpenSSL
 include(FindOpenSSL)
 find_package(OpenSSL 1.0.0 REQUIRED)
@@ -362,8 +368,8 @@ set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} ${OPENSSL_LIBRARIES})
 set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} ${OPENSSL_INCLUDE_DIR})
 
 # Cache Addtional flags...
-set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} CACHE STRING "Addtional libraries")
-set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "Addtional include directories")
+set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} CACHE STRING "Addtional libraries" FORCE)
+set(PW_ADDITIONAL_INC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "Addtional include directories" FORCE)
 
 message(STATUS "Additional libraries: ${PW_ADDITIONAL_LIBS}")
 message(STATUS "Additional include directories: ${PW_ADDITIONAL_INC_DIRS}")

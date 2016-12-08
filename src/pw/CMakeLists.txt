@@ -76,10 +76,10 @@ set(PW_PKGNAME_DEB "${pw_NAME}-${pw_VERSION}")
 
 add_subdirectory(_check)
 
-set(PWLIBS z ssl crypto dl pthread)
+#set(PWLIBS z ssl crypto dl pthread)
 set(PWINC_DIRS ${PW_ADDITIONAL_INC_DIRS} CACHE STRING "PW include directories" FORCE)
-set(PWLIBS_STATIC libpw.a ${PWLIBS} ${PW_ADDITIONAL_LIBS} CACHE STRING "PW(static) libraries" FORCE)
-set(PWLIBS_SHARED libpw.so ${PWLIBS} ${PW_ADDITIONAL_LIBS} CACHE STRING "PW(shared) libraries" FORCE )
+set(PWLIBS_STATIC libpw.a ${PW_ADDITIONAL_LIBS} CACHE STRING "PW(static) libraries" FORCE)
+set(PWLIBS_SHARED libpw.so ${PW_ADDITIONAL_LIBS} CACHE STRING "PW(shared) libraries" FORCE)
 set(PWLIBS ${PWLIBS_STATIC} CACHE STRING "PW libraries" FORCE)
 
 include_directories(${PWINC_DIRS})
@@ -110,7 +110,9 @@ set(SRCS_INSTANCE pw_instance_if.cpp pw_jobmanager.cpp pw_multichannel_if.cpp pw
 set(SRCS_ALL ${SRCS_COMMON} ${SRCS_SYSTEM} ${SRCS_STRING} ${SRCS_NETWORK} ${SRCS_CRYPTO} ${SRCS_INSTANCE})
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR})
+set(pw_ARCHIVE_DIR "${pw_BINARY_DIR}/${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}" CACHE PATH "Archive output directory" FORCE)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR})
+set(pw_LIBRARY_DIR "${pw_BINARY_DIR}/${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" CACHE PATH "Library output directory" FORCE)
 
 add_library(pw_shared SHARED ${SRCS_ALL})
 add_library(pw_static STATIC ${SRCS_ALL})
