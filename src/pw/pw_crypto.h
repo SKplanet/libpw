@@ -124,6 +124,7 @@ struct cipher_spec final
 	inline size_t getEncryptedSize ( size_t insize )
 	{
 		if ( size.block > 1 ) return ( size.block > 1 ) ? ( insize + size.block - ( insize % size.block ) ) : insize;
+		return 0;
 	}
 
 	std::ostream& dump ( std::ostream& os ) const;

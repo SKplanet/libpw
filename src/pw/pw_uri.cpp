@@ -83,11 +83,11 @@ _getPort(const char* service)
 	return port;
 }
 
+#if HAVE_URIPARSER
 static
 const char*
 _getErrorMessage(int err)
 {
-#ifdef HAVE_URIPARSER
 	switch(err)
 	{
 		case URI_SUCCESS: return "Success";
@@ -102,9 +102,10 @@ _getErrorMessage(int err)
 		case URI_ERROR_REMOVEBASE_REL_SOURCE:
 			return "Given base is not absolute";
 	}
-#endif
+
 	return "Unknown";
 }
+#endif
 
 #ifdef HAVE_URIPARSER
 inline

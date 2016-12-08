@@ -194,7 +194,7 @@ class Reader final
 {
 public:
 	inline Reader() = default;
-	inline Reader(size_t limit) : m_limit_depth(limit) {}
+//	inline Reader(size_t limit) : m_limit_depth(limit) {}
 
 public:
 	ssize_t parse(const char* buf, size_t blen);
@@ -216,7 +216,7 @@ private:
 	pw::IoBuffer m_buf;
 	std::stack<status_type> m_status;
 	std::queue<Value> m_cont;
-	const size_t m_limit_depth = 7;
+//	const size_t m_limit_depth = 7;
 
 private:
 	ssize_t _parse(const std::string& line);

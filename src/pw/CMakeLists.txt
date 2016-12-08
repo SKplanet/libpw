@@ -64,6 +64,10 @@ file(READ ${pw_CHANGELOG_FILE} pw_CHANGELOG_DATA)
 set(pw_README_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../README.md")
 set(pw_CONTRIBUTORS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../CONTRIBUTORS.md")
 
+# CPack variables
+set(CPACK_BUNDLE_NAME "${pw_NAME}")
+set(CPACK_BUNDLE_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist")
+
 set(RPMBUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/rpmbuild)
 set(RPMBUILDROOT_DIR ${RPMBUILD_DIR}/BUILDROOT)
 set(RPMSOURCE_FILE "libpw-${pw_VERSION}.tgz")
@@ -116,6 +120,8 @@ set(pw_LIBRARY_DIR "${pw_BINARY_DIR}/${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" CACHE PA
 
 add_library(pw_shared SHARED ${SRCS_ALL})
 add_library(pw_static STATIC ${SRCS_ALL})
+
+target_link_libraries(pw_shared ${PW_ADDITIONAL_LIBS})
 
 add_custom_target(doc
 	COMMAND doxygen ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile

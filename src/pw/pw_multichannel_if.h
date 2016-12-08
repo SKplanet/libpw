@@ -198,7 +198,7 @@ public:
 	inline const std::string& getPeerName(void) const { return m_peer_name; }
 
 	//! \brief 인스턴스를 덤프한다.
-	std::ostream& dump(std::ostream& os) const;
+	std::ostream& dump(std::ostream& os) const override;
 
 public:
 	explicit MultiChannelInterface(const MultiChannelPool::create_param_type& param);
@@ -225,7 +225,7 @@ protected:
 	virtual void eventDisconnected(void) = 0;
 
 	//! \brief 핑 타임아웃 시, 호출하는 이벤트 메소드.
-	void eventPingTimeout(void);
+	void eventPingTimeout(void) override;
 
 	//! \brief 동기적으로 접속을 시도한다. 프로세스는 반환 전까지 멈춘다.
 	//!	타임아웃은 ::alram(2)으로 구현되어 있으며, 5초이다.
@@ -243,14 +243,14 @@ protected:
 	void setDisconnected(void);
 
 protected:
-	void eventTimer(int id, void* param);
+	void eventTimer(int id, void* param) override;
 
 private:
-	void eventConnect(void);
-	void eventError(Error type, int err);
+	void eventConnect(void) override;
+	void eventError(Error type, int err) override;
 
 private:
-	void hookReadPacket(const MsgPacket& pk, const char* body, size_t blen);
+	void hookReadPacket(const PacketInterface& pk, const char* body, size_t blen) override;
 
 private:
 	// 채널풀 관련 정보

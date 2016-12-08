@@ -40,6 +40,7 @@
 #include <netinet/tcp.h>
 
 namespace pw {
+using tv_usec_type = decltype(timeval::tv_usec);
 
 typedef union cmsg_fd
 {
@@ -164,7 +165,7 @@ Socket::s_setNoDelay(int fd, bool nodelay)
 bool
 Socket::s_setSendBufferSize(int fd, size_t blen)
 {
-	if ( (blen < 0) or (blen > INT_MAX) ) { errno = EFAULT; return false; }
+	if ( /*(blen < 0) or*/ (blen > INT_MAX) ) { errno = EFAULT; return false; }
 	const int v(blen);
 	return 0 == setsockopt(fd, SOL_SOCKET, SO_SNDBUF, &v, sizeof(v));
 }
@@ -172,7 +173,7 @@ Socket::s_setSendBufferSize(int fd, size_t blen)
 bool
 Socket::s_setReceiveBufferSize(int fd, size_t blen)
 {
-	if ( (blen < 0) or (blen > INT_MAX) ) { errno = EFAULT; return false; }
+	if ( /*(blen < 0) or*/ (blen > INT_MAX) ) { errno = EFAULT; return false; }
 	const int v(blen);
 	return 0 == setsockopt(fd, SOL_SOCKET, SO_RCVBUF, &v, sizeof(v));
 }
@@ -357,7 +358,8 @@ Socket::s_connectSync(int& sockfd, const char* host, const char* service, int fa
 			return false;
 		}
 
-		struct timeval tv = { long(to_msec / 1000L), long(to_msec % 1000L * 1000L) };
+		struct timeval tv = { long(to_msec / 1000L), (tv_usec_type)(to_msec % 1000LL * 1000LL) };
+
 		int res;
 		fd_set wfd;
 
@@ -436,7 +438,7 @@ Socket::s_connect(connect_param_type& param)
 		return false;
 	}
 
-	struct timeval tv = { (param.in.timeout / 1000LL), (param.in.timeout % 1000LL) };
+	struct timeval tv = { (param.in.timeout / 1000LL), (tv_usec_type)(param.in.timeout % 1000LL) };
 	struct timeval* ptv(param.in.timeout ? &tv : nullptr);
 	fd_set wfd;
 	int selfd(0);
@@ -505,7 +507,7 @@ Socket::s_receive(io_param_type& param)
 	}
 
 	// Sync-socket
-	struct timeval tv = { (param.in.timeout / 1000LL), (param.in.timeout % 1000LL) };
+	struct timeval tv = { (param.in.timeout / 1000LL), (tv_usec_type)(param.in.timeout % 1000LL) };
 	struct timeval* ptv(param.in.timeout ? &tv : nullptr);
 	fd_set rfd;
 	int selfd(0);
@@ -574,7 +576,7 @@ Socket::s_send(io_param_type& param)
 	}
 
 	// Sync-socket
-	struct timeval tv = { (param.in.timeout / 1000LL), (param.in.timeout % 1000LL) };
+	struct timeval tv = { (param.in.timeout / 1000LL), (tv_usec_type)(param.in.timeout % 1000LL) };
 	struct timeval* ptv(param.in.timeout ? &tv : nullptr);
 	fd_set wfd;
 	int selfd(0);

@@ -182,6 +182,7 @@ _print_str2(const char* str, size_t len, void* u)
 	return 1;
 }
 
+#if 0
 inline
 static
 int
@@ -197,6 +198,7 @@ _toNIDType(ssl::Sign stype)
 
 	return -1;
 }
+#endif
 
 inline
 static
@@ -221,6 +223,7 @@ _toRSAPadding(ssl::RSAPadding mypad)
 	return RSA_PKCS1_PADDING;
 }
 
+#if 0
 inline
 static
 int
@@ -247,6 +250,7 @@ _toEVP_PKEY_id(ssl::AsymKeyAlg ka)
 
 	return -1;
 }
+#endif
 
 inline
 static

@@ -94,7 +94,7 @@ __makeMaskByCIDR<uint128_t>(size_t bc)
 	union {
 		uint64_t u64[2];
 		uint128_t u128;
-	} u { high.to_ullong(), low.to_ullong() };
+	} u { {high.to_ullong(), low.to_ullong()} };
 
 	return u.u128;
 }

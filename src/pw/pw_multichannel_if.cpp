@@ -598,9 +598,10 @@ MultiChannelInterface::eventConnect(void)
 }
 
 void
-MultiChannelInterface::hookReadPacket(const MsgPacket& pk, const char* body, size_t bodylen)
+MultiChannelInterface::hookReadPacket(const PacketInterface& _pk, const char* body, size_t bodylen)
 {
 	//PWSHOWMETHOD();
+	const MsgPacket& pk(static_cast<const MsgPacket&>(_pk));
 	if ( isConnected() )
 	{
 		//PWTRACE("isConnected!!!!!");

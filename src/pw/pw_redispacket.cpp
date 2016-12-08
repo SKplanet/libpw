@@ -89,6 +89,7 @@ _assignBulk(const char* s)
 	return nullptr;
 }
 
+#if 0
 inline
 static
 void*
@@ -101,6 +102,7 @@ _assignBulk(const char* s, size_t l)
 
 	return new std::string();
 }
+#endif
 
 Value::Value ( ValueType t, size_t reserved_size ) : m_type(t)
 {

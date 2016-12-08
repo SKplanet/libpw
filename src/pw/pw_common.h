@@ -257,11 +257,19 @@ constexpr size_t PW_CODE_SIZE = 4;
 template<typename _Char>
 struct char_ci_less
 {
+#if __cplusplus >= 201402L
 	inline constexpr bool operator () (const _Char c1, const _Char c2) const
 	{
 		const auto& f = std::use_facet<std::ctype<_Char>>(std::locale());
 		return f.toupper(c1) < f.toupper(c2);
 	}
+#else
+	inline bool operator () (const _Char c1, const _Char c2) const
+	{
+		const auto& f = std::use_facet<std::ctype<_Char>>(std::locale());
+		return f.toupper(c1) < f.toupper(c2);
+	}
+#endif
 };
 
 template<typename _Char>
@@ -619,11 +627,10 @@ public:
 	inline bool operator == (const blob_type& b) const
 	{
 		if ( this == &b ) return true;
-		if ( buf == b.buf )
-		{
-			return size == b.size;
-		}
+		if ( buf == b.buf ) return size == b.size;
+		if ( size not_eq b.size ) return false;
 
+		return ::memcmp(buf, b.buf, size) == 0;
 	}
 };
 
