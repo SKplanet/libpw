@@ -25,6 +25,7 @@
 # \license This project is released under the MIT License.
 
 enable_language(C CXX)
+
 include(GNUInstallDirs)
 include(CheckIncludeFile)
 include(CheckFunctionExists)
@@ -338,10 +339,16 @@ set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} pthread)
 set(PW_ADDITIONAL_LIBS ${PW_ADDITIONAL_LIBS} dl)
 
 # Check OpenSSL
+if (OS_APPLE)
+	# Install openssl with brew for mac
+	set(OPENSSL_ROOT_DIR /usr/local/opt/openssl)
+endif()
 include(FindOpenSSL)
 find_package(OpenSSL 1.0.0 REQUIRED)
+
 set(CMAKE_EXTRA_INCLUDE_FILES "${OPENSSL_INCLUDE_DIR}/openssl/ssl.h")
 set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES})
+
 check_function_exists("SSLv2_method" HAVE_SSLV2_METHOD)
 check_function_exists("TLSv1_method" HAVE_TLSV1_METHOD)
 check_function_exists("TLSv1_1_method" HAVE_TLSV1_1_METHOD)
