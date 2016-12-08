@@ -27,4 +27,5 @@
 project(simple_echo CXX)
 set(TARGET ${PROJECT_NAME})
 add_executable(${TARGET} main.cpp)
+add_dependencies(${TARGET} pw_static)
 target_link_libraries(${TARGET} ${PWLIBS})

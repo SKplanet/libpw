@@ -27,5 +27,6 @@
 project(echo CXX)
 set(TARGET ${PROJECT_NAME})
 add_executable(${TARGET} main.cpp)
+add_dependencies(${TARGET} pw_static)
 target_link_libraries(${TARGET} ${PWLIBS})
 configure_file(config.cmake.ini ${CMAKE_CURRENT_BINARY_DIR}/config.ini @ONLY)
