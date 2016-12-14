@@ -35,6 +35,7 @@
 #ifdef HAVE_KQUEUE
 namespace pw {
 
+#if 0
 static
 std::string
 _evfilt2string(int evfilt)
@@ -48,14 +49,21 @@ _evfilt2string(int evfilt)
 	case  EVFILT_PROC: return std::string("EVFILT_PROC");
 	case  EVFILT_SIGNAL: return std::string("EVFILT_SIGNAL");
 	case  EVFILT_TIMER: return std::string("EVFILT_TIMER");
+#ifdef EVILT_NETDEV
 	case  EVFILT_NETDEV: return std::string("EVFILT_NETDEV");
+#endif
 	case  EVFILT_FS: return std::string("EVFILT_FS");
+#ifdef EVFILT_LIO
 	case  EVFILT_LIO: return std::string("EVFILT_LIO");
+#endif
+#ifdef EVFILT_USER
 	case  EVFILT_USER: return std::string("EVFILT_USER");
+#endif
 	}
 
 	return std::string("INVALID_EVFILT");
 }
+#endif
 
 static
 std::string
@@ -159,14 +167,14 @@ IoPoller_Kqueue::initialize(int kfd)
 		const auto res_ident(rev.ident not_eq (uintptr_t)-1);
 		if ( res_ident )
 		{
-			PWTRACE("failed to initialize kqueue: rev.ident is not -1. rev.ident: %d", rev.ident);
+			PWTRACE("failed to initialize kqueue: rev.ident is not -1. rev.ident: %d", int(rev.ident));
 			break;
 		}
 
 		const auto res_flags(not (rev.flags bitand EV_ERROR));
 		if ( res_flags )
 		{
-			PWTRACE("failed to initialize kqueue: rev.flags without EV_ERROR. rev.flags: %s", pw::c_str(_evaction2string(ev.flags)));
+			PWTRACE("failed to initialize kqueue: rev.flags without EV_ERROR. rev.flags: %s", pw::cstr(_evaction2string(ev.flags)));
 			break;
 		}
 #endif
