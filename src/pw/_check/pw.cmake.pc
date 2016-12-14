@@ -7,5 +7,5 @@ Name: pw
 Description: PW library
 Version: @pw_VERSION@
 URL: @pw_URL@
-Libs: -lssl -lcrypto -ldl -lpthread -lrt @URIPARSER_LDFLAGS@ @JSONCPP_LDFLAGS@ @SQLITE3_LDFLAGS@ @_PW_PC_BOOST_REGEX_LDFLAGS@ -L${libdir} -lpw
+Libs: -lssl -lcrypto -ldl -lpthread -lrt @URIPARSER_LDFLAGS@ @JSONCPP_LDFLAGS@ @SQLITE3_LDFLAGS@ @_PW_PC_BOOST_REGEX_LDFLAGS@ @_PW_PC_KQUEUE_LDFLAGS@ -L${libdir} -lpw
 Cflags: @CXXFLAGS_STD@ @CXXFLAGS_THREAD@ -I${includedir} @URIPARSER_CFLAGS@ @JSONCPP_CFLAGS@ @SQLITE3_CFLAGS@
