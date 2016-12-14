@@ -159,8 +159,14 @@ IoPoller_Select::dispatch(int timeout_msec)
 	ssize_t ret(select(m_max_fd+1, &rfds, &wfds, nullptr, &tv));
 	if ( -1 == ret )
 	{
-		PWLOGLIB("select error(%d): %s", errno, strerror(errno));
-		return -1;
+		// skip intterupt error.
+		if ( errno != EINTR )
+		{
+			PWLOGLIB("select error(%d): %s", errno, strerror(errno));
+			return -1;
+		}
+
+		return 0;
 	}
 
 	int event(0);

@@ -93,6 +93,9 @@ public:
 
 	static void s_setTrace(bool use) { s_use_trace = use; }
 	static bool s_getTrace(void) { return s_use_trace; }
+	
+	static const char* s_getErrorNoName(int e);
+	static const char* s_getErrorNoName() { return Log::s_getErrorNoName(errno); }
 
 public:
 	explicit Log();

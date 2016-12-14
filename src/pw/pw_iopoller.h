@@ -79,8 +79,14 @@ public:
 	//! \brief epoll fd로부터 epoll 객체 생성
 	static IoPoller* s_createFromEpollFD(int fd);
 
+	//! \brief kqueue fd로부터 kqueue 객체 생성
+	static IoPoller* s_createFromKqueueFD(int fd);
+
 	//! \brief 폴러 반환
 	static void s_release(IoPoller* poller);
+
+	//! \brief 폴러 플래그를 문자열로 변환
+	static std::string s_getMaskString(int mask);
 
 public:
 	//! \brief 이벤트 감시 추가

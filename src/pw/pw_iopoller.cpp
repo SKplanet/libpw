@@ -31,8 +31,27 @@
 #include "./pw_iopoller.h"
 #include "./pw_iopoller_select.h"
 #include "./pw_iopoller_epoll.h"
+#include "./pw_iopoller_kqueue.h"
 
 namespace pw {
+
+std::string
+IoPoller::s_getMaskString(int flags)
+{
+	std::string result;
+
+	if ( flags & POLLIN ) result += "POLLIN|";
+	if ( flags & POLLPRI ) result += "POLLPRI|";
+	if ( flags & POLLOUT ) result += "POLLOUT|";
+	if ( flags & POLLERR ) result += "POLLERR|";
+	if ( flags & POLLHUP ) result += "POLLHUP|";
+	if ( flags & POLLNVAL ) result += "POLLNVAL|";
+
+	if ( result.empty() ) result = "(null)";
+	else result.resize(result.size()-1);
+
+	return result;
+}
 
 IoPoller*
 IoPoller::s_create(const char* type)
@@ -50,9 +69,18 @@ IoPoller::s_create(const char* type)
 		if ( !strcasecmp("epoll", type) ) { poller =  new IoPoller_Epoll(); break; }
 #endif
 
+#ifdef HAVE_KQUEUE
+		if ( !strcasecmp("kqueue", type) ) { poller = new IoPoller_Kqueue(); break; }
+#endif
+
 	// by system default
 #ifdef HAVE_EPOLL
 		poller = new IoPoller_Epoll();
+		break;
+#endif
+
+#ifdef HAVE_KQUEUE
+		poller = new IoPoller_Kqueue();
 		break;
 #endif
 
@@ -79,6 +107,23 @@ IoPoller::s_createFromEpollFD(int fd)
 {
 #ifdef HAVE_EPOLL
 	IoPoller_Epoll* poll(new IoPoller_Epoll());
+	do {
+		if ( nullptr == poll ) break;
+		if ( not poll->initialize(fd) ) break;
+		return poll;
+	} while (false);
+
+	if ( poll ) delete poll;
+#endif
+
+	return nullptr;
+}
+
+IoPoller*
+IoPoller::s_createFromKqueueFD(int fd)
+{
+#ifdef HAVE_KQUEUE
+	IoPoller_Kqueue* poll(new IoPoller_Kqueue());
 	do {
 		if ( nullptr == poll ) break;
 		if ( not poll->initialize(fd) ) break;

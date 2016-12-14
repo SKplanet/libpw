@@ -7,7 +7,7 @@ endif
 help: all
 
 all:
-	@echo "make [unix|eclipse|xcode|clean|eclipse]";\
+	@echo "make [unix|eclipse|xcode|clean|eclipse|codelite]";\
 	echo "ex) ECLIPSE_VERSION=4.7 make eclipse"
 
 unix:remake-build-dir
@@ -20,7 +20,7 @@ remake-build-dir:
 
 codelite:remake-build-dir
 	cd build;\
-	$(CMAKE) -DPW_BUILD_TYPE=codelite -G"CodeLite - Unix Makefiles" ../src
+	$(CMAKE) -DPW_BUILD_TYPE=codelite -G"CodeLite - Unix Makefiles" ..
 	
 eclipse:remake-build-dir
 	cd build;\

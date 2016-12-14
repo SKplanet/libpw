@@ -1,6 +1,6 @@
 /*
  * The MIT License (MIT)
- * Copyright (c) 2015 SK PLANET. All Rights Reserved.
+ * Copyright (c) 2016 SK PLANET. All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,29 @@
  */
 
 /*!
- * \file pw_iopoller_epoll.h
- * \brief I/O poller implementation of epoll(Linux).
- * \copyright Copyright (c) 2015, SK PLANET. All Rights Reserved.
+ * \file pw_iopoller_kqueue.h
+ * \brief I/O poller implementation of kqueue(BSD).
+ * \copyright Copyright (c) 2016, SK PLANET. All Rights Reserved.
  * \license This project is released under the MIT License.
  */
 
 #include "./pw_common.h"
 #include "./pw_iopoller.h"
 
-#if defined(HAVE_EPOLL)
-#ifndef __PW_IOPOLLER_EPOLL_H__
-#define __PW_IOPOLLER_EPOLL_H__
+#if defined(HAVE_KQUEUE)
+#ifndef __PW_IOPOLLER_KQUEUE_H__
+#define __PW_IOPOLLER_KQUEUE_H__
 
-#include <sys/epoll.h>
+#include <sys/event.h>
 
 namespace pw {
 
-class IoPoller_Epoll : public IoPoller
+class IoPoller_Kqueue : public IoPoller
 {
 public:
 	enum
 	{
-		MAX_EPOLL_SIZE = 1000000LL,
+		MAX_KQUEUE_SIZE = 1000000LL,
 		MAX_EVENT_SIZE = 1024,
 	};
 
@@ -55,31 +55,31 @@ public:
 	bool orMask(int fd, int mask) override;
 	bool andMask(int fd, int mask) override;
 	ssize_t dispatch(int timeout_msec) override;
-	inline Event* getEvent(int fd) override { return ( fd < MAX_EPOLL_SIZE ? m_clients[fd].event : nullptr ); }
+	inline Event* getEvent(int fd) override { return ( fd < MAX_KQUEUE_SIZE ? m_clients[fd].event : nullptr ); }
 
 public:
-	const char* getType(void) const override { return "epoll"; }
+	const char* getType(void) const override { return "kqueue"; }
 
 protected:
 	bool initialize(void) override;
-	bool initialize(int efd);
+	bool initialize(int kfd);
 
 public:
 	void destroy(void) override;
 
 protected:
-	IoPoller_Epoll() : m_epoll(-1) {}
-	~IoPoller_Epoll() {}
+	IoPoller_Kqueue() : m_kqueue(-1) {}
+	~IoPoller_Kqueue() {}
 
 protected:
-	int					m_epoll;
-	event_type			m_clients[MAX_EPOLL_SIZE];
-	struct epoll_event	m_events[MAX_EVENT_SIZE];
+	int					m_kqueue;
+	event_type			m_clients[MAX_KQUEUE_SIZE];
+	struct kevent		m_events[MAX_EVENT_SIZE];
 
-friend class IoPoller;
+	friend class IoPoller;
 };
 
 }; // namespace pw
 
-#endif//!__PW_IOPOLLER_EPOLL_H__
-#endif//HAVE_EPOLL
+#endif//!__PW_IOPOLLER_KQUEUE_H__
+#endif//HAVE_KQUEUE

@@ -143,34 +143,43 @@ IoPoller_Epoll::dispatch(int timeout_msec)
 	ssize_t ret(epoll_wait(m_epoll, m_events, MAX_EVENT_SIZE, timeout_msec));
 	if ( -1 == ret )
 	{
-		PWLOGLIB("epoll_wait error(%d): %s", errno, strerror(errno));
-		return -1;
+		// skip intterupt error.
+		if ( errno != EINTR )
+		{
+			PWLOGLIB("epoll_wait error(%d): %s", errno, strerror(errno));
+			return -1;
+		}
+
+		return 0;
 	}
 
-	struct epoll_event* ib(m_events);
-	struct epoll_event* ie(m_events+ret);
-	bool del_event(false);
-
-	event_type* e(nullptr);
-
-	while ( ib not_eq ie )
+	if ( ret > 0 )
 	{
-		e = (event_type*)ib->data.ptr;
-		if ( e->event )
-		{
-			del_event = false;
-			e->event->eventIo(e->fd, ib->events, del_event);
-			if ( del_event )
-			{
-				this->remove(e->fd);
-			}
-		}
-		else
-		{
-			PWLOGLIB("epoll_wait invalid client: fd:%d", e->fd);
-		}
+		struct epoll_event* ib(m_events);
+		struct epoll_event* ie(m_events+ret);
+		bool del_event(false);
 
-		++ib;
+		event_type* e(nullptr);
+
+		while ( ib not_eq ie )
+		{
+			e = (event_type*)ib->data.ptr;
+			if ( e->event )
+			{
+				del_event = false;
+				e->event->eventIo(e->fd, ib->events, del_event);
+				if ( del_event )
+				{
+					this->remove(e->fd);
+				}
+			}
+			else
+			{
+				PWLOGLIB("epoll_wait invalid client: fd:%d", e->fd);
+			}
+
+			++ib;
+		}
 	}
 
 	return ret;
@@ -180,7 +189,7 @@ bool
 IoPoller_Epoll::initialize(void)
 {
 #ifdef HAVE_EPOLL_CREATE1
-	int epoll_fd(epoll_create1(0));
+	int epoll_fd(epoll_create1(EPOLL_CLOEXEC));
 #else
 	int epoll_fd(epoll_create(MAX_EVENT_SIZE));
 #endif

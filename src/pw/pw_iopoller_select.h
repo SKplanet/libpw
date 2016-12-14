@@ -42,20 +42,20 @@ namespace pw {
 class IoPoller_Select : public IoPoller
 {
 public:
-	bool add(int fd, Event* client, int mask);
-	bool remove(int fd);
-	bool setMask(int fd, int mask);
-	bool orMask(int fd, int mask);
-	bool andMask(int fd, int mask);
-	ssize_t dispatch(int timeout_msec);
-	inline Event* getEvent(int fd) { return ( fd < FD_SETSIZE ? m_clients[fd].event : nullptr ); }
+	bool add(int fd, Event* client, int mask) override;
+	bool remove(int fd) override;
+	bool setMask(int fd, int mask) override;
+	bool orMask(int fd, int mask) override;
+	bool andMask(int fd, int mask) override;
+	ssize_t dispatch(int timeout_msec) override;
+	inline Event* getEvent(int fd) override { return ( fd < FD_SETSIZE ? m_clients[fd].event : nullptr ); }
 
 public:
-	const char* getType(void) const { return "select"; }
+	const char* getType(void) const override { return "select"; }
 
 protected:
-	bool initialize(void);
-	void destroy(void);
+	bool initialize(void) override;
+	void destroy(void) override;
 
 protected:
 	IoPoller_Select() {}

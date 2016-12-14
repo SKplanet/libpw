@@ -91,14 +91,16 @@ add_definitions(${PWCXXFLAGS})
 
 # Set sources
 file(GLOB HDRS *.h)
-list(REMOVE_ITEM HDRS pw_iopoller_epoll.h pw_iopoller_select.h)
+list(REMOVE_ITEM HDRS pw_iopoller_epoll.h pw_iopoller_select.h
+	pw_iopoller_kqueue.h)
 
 set(SRCS_COMMON pw_common.cpp)
 set(SRCS_SYSTEM pw_log.cpp pw_timer.cpp pw_sysinfo.cpp pw_module.cpp pw_exception.cpp)
 set(SRCS_STRING pw_string.cpp pw_tokenizer.cpp pw_ini.cpp pw_encode.cpp
 	pw_date.cpp pw_key.cpp pw_compress.cpp pw_region.cpp pw_uri.cpp
 	pw_strfltr.cpp)
-set(SRCS_NETWORK pw_iopoller.cpp pw_iopoller_select.cpp pw_iopoller_epoll.cpp
+set(SRCS_NETWORK pw_iopoller.cpp pw_iopoller_select.cpp
+	pw_iopoller_epoll.cpp pw_iopoller_kqueue.cpp
 	pw_socket.cpp pw_iobuffer.cpp pw_sockaddr.cpp
 	pw_packet_if.cpp pw_channel_if.cpp pw_listener_if.cpp
 	pw_msgpacket.cpp pw_msgchannel.cpp
