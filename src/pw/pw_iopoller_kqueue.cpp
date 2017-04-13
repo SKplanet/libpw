@@ -65,6 +65,7 @@ _evfilt2string(int evfilt)
 }
 #endif
 
+#ifdef OS_APPLE
 static
 std::string
 _evaction2string(unsigned int action)
@@ -91,6 +92,7 @@ _evaction2string(unsigned int action)
 
 	return result;
 }
+#endif
 
 #if 0
 static

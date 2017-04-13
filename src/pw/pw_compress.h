@@ -44,11 +44,11 @@ public:
 		CHUNK_SIZE = 1024,		//!< 기본 청크 크기
 	};
 
-	typedef enum compress_type
+	enum compress_type : int
 	{
 		CT_COMPRESS,	//!< 압축
 		CT_UNCOMPRESS,	//!< 압축 해제
-	} compress_type;
+	};
 
 public:
 	static bool s_initialize(void);
@@ -57,7 +57,7 @@ public:
 	static const char* s_getGZHeader(void);
 
 	//! \brief 생성하기.
-	static Compress* s_create(compress_type ct, ...);
+	static Compress* s_create(int ct, ...);
 
 	//! \brief 압축객체 생성하기.
 	static Compress* s_createCompress(int level = 9, size_t chunk_size = CHUNK_SIZE, bool gzip = false);

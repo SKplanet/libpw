@@ -656,7 +656,7 @@ Compress::s_getGZHeader(void)
 }
 
 Compress*
-Compress::s_create(compress_type ct, ...)
+Compress::s_create(int ct, ...)
 {
 	va_list lst;
 	va_start(lst, ct);

@@ -391,7 +391,7 @@ friend class Ssl;
 class SslCertificate final
 {
 public:
-	enum create_type
+	enum create_type : int
 	{
 		CT_RAW_DATA,
 		CT_FILE,
@@ -401,7 +401,7 @@ public:
 	using kv_cont = std::map<std::string, line_cont>;
 
 public:
-	static SslCertificate* s_create(create_type ct, ...);
+	static SslCertificate* s_create(int ct, ...);
 	static SslCertificate* s_createRawData(void* rawdata);
 	static SslCertificate* s_createFile(const char* path, const char* passwd = nullptr);
 	inline static void s_release(SslCertificate* v) { delete v; }
@@ -494,7 +494,7 @@ private:
 class SslAsymmetricKey final
 {
 public:
-	enum create_type
+	enum create_type : int
 	{
 		CT_NULL,
 		CT_RAW_DATA,
@@ -510,7 +510,7 @@ public:
 	};
 
 public:
-	static SslAsymmetricKey* s_create(create_type ct, ...);
+	static SslAsymmetricKey* s_create(int ct, ...);
 	static SslAsymmetricKey* s_createNull(void);
 	static SslAsymmetricKey* s_createRawData(void* rawdata);
 	static SslAsymmetricKey* s_createGenerateRSA(size_t keysize);

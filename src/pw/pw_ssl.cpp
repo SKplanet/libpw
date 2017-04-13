@@ -1562,7 +1562,7 @@ SslCertificate::s_createFile ( const char* path, const char* passwd )
 
 
 SslCertificate*
-SslCertificate::s_create(create_type ct, ...)
+SslCertificate::s_create(int ct, ...)
 {
 	va_list lst;
 	va_start(lst, ct);
@@ -1957,7 +1957,7 @@ SslAsymmetricKey::s_createPublicKeyMemory ( const void* in, size_t ilen, const c
 }
 
 SslAsymmetricKey*
-SslAsymmetricKey::s_create(create_type ct, ...)
+SslAsymmetricKey::s_create(int ct, ...)
 {
 	va_list lst;
 	va_start(lst, ct);
