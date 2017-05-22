@@ -100,6 +100,51 @@ enum class Direction : int
 	DECRYPT = 0,
 };
 
+//! \brief Elliptic Curve Cryptography
+enum class ECType : int {
+	INVALID,
+	X9_62_PRIME_192_V1,
+	X9_62_PRIME_192_V2,
+	X9_62_PRIME_192_V3,
+	X9_62_PRIME_239_V1,
+	X9_62_PRIME_239_V2,
+	X9_62_PRIME_239_V3,
+	X9_62_PRIME_256_V1,
+	SECP_112_R1,
+	SECP_112_R2,
+	SECP_128_R1,
+	SECP_128_R2,
+	SECP_160_K1,
+	SECP_160_R1,
+	SECP_160_R2,
+	SECP_192_K1,
+	SECP_224_K1,
+	SECP_224_R1,
+	SECP_256_K1,
+	SECP_384_R1,
+	SECP_521_R1,
+	X9_62_C2_PNB_163_V1,
+	X9_62_C2_PNB_163_V2,
+	X9_62_C2_PNB_163_V3,
+	X9_62_C2_PNB_176_V1,
+	X9_62_C2_TNB_191_V1,
+	X9_62_C2_TNB_191_V2,
+	X9_62_C2_TNB_191_V3,
+	X9_62_C2_ONB_191_V4,
+	X9_62_C2_ONB_191_V5,
+	X9_62_C2_PNB_208_W1,
+	X9_62_C2_TNB_239_V1,
+	X9_62_C2_TNB_239_V2,
+	X9_62_C2_TNB_239_V3,
+	X9_62_C2_ONB_239_V4,
+	X9_62_C2_ONB_239_V5,
+	X9_62_C2_PNB_272_W1,
+	X9_62_C2_PNB_304_W1,
+	X9_62_C2_TNB_359_V1,
+	X9_62_C2_PNB_368_W1,
+	X9_62_C2_TNB_431_R1,
+};
+
 struct cipher_spec final
 {
 	using engine_type = const void* ;
@@ -137,6 +182,10 @@ extern bool initializeLocks ( void );
 
 extern int toNID ( CipherType in );
 extern CipherType toCipherType ( int nid );
+
+extern int toNID ( ECType in );
+extern ECType toECType( int nid );
+
 extern bool getCipherSpec ( cipher_spec& out, CipherType in );
 extern bool getCipherSpecByNID ( cipher_spec& out, int nid );
 

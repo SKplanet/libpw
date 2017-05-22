@@ -44,8 +44,12 @@ namespace pw
 #define SCTX(ptr)	static_cast<EVP_CIPHER_CTX*>((ptr)->m_ctx)
 
 static striptr_cont	s_str2cipher;
-static intint_cont s_nid2pw;
-static intint_cont s_pw2nid;
+static intint_cont s_nid2pw_cipher;
+static intint_cont s_pw2nid_cipher;
+
+static striobj_cont<int>	s_str2ec_nid;
+static intint_cont s_nid2pw_ec;
+static intint_cont s_pw2nid_ec;
 
 static std::mutex*	s_ssl_locks ( nullptr );
 
@@ -179,9 +183,9 @@ static
 const ::EVP_CIPHER*
 _getCipherByPW ( crypto::CipherType ct )
 {
-	auto ib ( s_pw2nid.find ( static_cast<int> ( ct ) ) );
+	auto ib ( s_pw2nid_cipher.find ( static_cast<int> ( ct ) ) );
 
-	if ( ib == s_pw2nid.end() ) return nullptr;
+	if ( ib == s_pw2nid_cipher.end() ) return nullptr;
 
 	return _getCipherByNID ( ib->second );
 }
@@ -224,13 +228,26 @@ _setCipher ( const EVP_CIPHER* e, CipherType ct )
 	//PWTRACE("engine:%p nid:%d ct:%d sn:%s ln:%s", e, nid, ct, sn, OBJ_nid2ln(nid));
 	auto ptr ( ( void* ) const_cast<EVP_CIPHER*> ( e ) );
 	s_str2cipher[sn] = ptr;
-	s_nid2pw[nid] = static_cast<int> ( ct );
-	s_pw2nid[static_cast<int> ( ct )] = nid;
+	s_nid2pw_cipher[nid] = static_cast<int> ( ct );
+	s_pw2nid_cipher[static_cast<int> ( ct )] = nid;
 }
+
+static
+inline
+void
+_setEC ( ECType ec, int nid, const char* sn )
+{
+	s_str2ec_nid[sn] = nid;
+	s_nid2pw_ec[nid] = static_cast<int>(ec);
+	s_pw2nid_ec[static_cast<int>(ec)] = nid;
+}
+
+#define INIT_EC_CONV(ec,postfix)	_setEC(ec, NID_##postfix, SN_##postfix)
 
 bool
 initialize ( void )
 {
+	//PWTRACE("crypto library initializing...");
 	static std::atomic<bool> s_init ( false );
 
 	if ( s_init ) return true;
@@ -305,6 +322,47 @@ initialize ( void )
 	_setCipher ( EVP_aes_256_cbc_hmac_sha256(), CipherType::AES_256_CBC_HMAC_SHA256 );
 #endif
 
+	INIT_EC_CONV(ECType::X9_62_PRIME_192_V1, X9_62_prime192v1);
+	INIT_EC_CONV(ECType::X9_62_PRIME_192_V2, X9_62_prime192v2);
+	INIT_EC_CONV(ECType::X9_62_PRIME_192_V3, X9_62_prime192v3);
+	INIT_EC_CONV(ECType::X9_62_PRIME_239_V1, X9_62_prime239v1);
+	INIT_EC_CONV(ECType::X9_62_PRIME_239_V2, X9_62_prime239v2);
+	INIT_EC_CONV(ECType::X9_62_PRIME_239_V3, X9_62_prime239v3);
+	INIT_EC_CONV(ECType::X9_62_PRIME_256_V1, X9_62_prime256v1);
+	INIT_EC_CONV(ECType::SECP_112_R1, secp112r1);
+	INIT_EC_CONV(ECType::SECP_112_R2, secp112r2);
+	INIT_EC_CONV(ECType::SECP_128_R1, secp128r1);
+	INIT_EC_CONV(ECType::SECP_128_R2, secp128r2);
+	INIT_EC_CONV(ECType::SECP_160_K1, secp160k1);
+	INIT_EC_CONV(ECType::SECP_160_R1, secp160r1);
+	INIT_EC_CONV(ECType::SECP_160_R2, secp160r2);
+	INIT_EC_CONV(ECType::SECP_192_K1, secp192k1);
+	INIT_EC_CONV(ECType::SECP_224_K1, secp224k1);
+	INIT_EC_CONV(ECType::SECP_224_R1, secp224r1);
+	INIT_EC_CONV(ECType::SECP_256_K1, secp256k1);
+	INIT_EC_CONV(ECType::SECP_384_R1, secp384r1);
+	INIT_EC_CONV(ECType::SECP_521_R1, secp521r1);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_163_V1, X9_62_c2pnb163v1);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_163_V2, X9_62_c2pnb163v2);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_163_V3, X9_62_c2pnb163v3);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_176_V1, X9_62_c2pnb176v1);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_191_V1, X9_62_c2tnb191v1);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_191_V2, X9_62_c2tnb191v2);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_191_V3, X9_62_c2tnb191v3);
+	INIT_EC_CONV(ECType::X9_62_C2_ONB_191_V4, X9_62_c2onb191v4);
+	INIT_EC_CONV(ECType::X9_62_C2_ONB_191_V5, X9_62_c2onb191v5);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_208_W1, X9_62_c2pnb208w1);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_239_V1, X9_62_c2tnb239v1);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_239_V2, X9_62_c2tnb239v2);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_239_V3, X9_62_c2tnb239v3);
+	INIT_EC_CONV(ECType::X9_62_C2_ONB_239_V4, X9_62_c2onb239v4);
+	INIT_EC_CONV(ECType::X9_62_C2_ONB_239_V5, X9_62_c2onb239v5);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_272_W1, X9_62_c2pnb272w1);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_304_W1, X9_62_c2pnb304w1);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_359_V1, X9_62_c2tnb359v1);
+	INIT_EC_CONV(ECType::X9_62_C2_PNB_368_W1, X9_62_c2pnb368w1);
+	INIT_EC_CONV(ECType::X9_62_C2_TNB_431_R1, X9_62_c2tnb431r1);
+
 	s_init = true;
 	return true;
 }
@@ -322,14 +380,29 @@ toNID ( CipherType in )
 CipherType
 toCipherType ( int nid )
 {
-	auto ib ( s_nid2pw.find ( nid ) );
+	auto ib ( s_nid2pw_cipher.find ( nid ) );
 
-	if ( ib == s_nid2pw.end() )
+	if ( ib == s_nid2pw_cipher.end() )
 	{
 		return CipherType::INVALID;
 	}
 
 	return static_cast<CipherType> ( ib->second );
+}
+
+int
+toNID(ECType in)
+{
+	//PWTRACE("params: ec=%d", static_cast<int>(in));
+	auto ib(s_pw2nid_ec.find(static_cast<int>(in)));
+	return ib not_eq s_pw2nid_ec.end() ? ib->second : -1;
+}
+
+ECType
+toECType(int nid)
+{
+	auto ib(s_nid2pw_ec.find(nid));
+	return ib not_eq s_nid2pw_ec.end() ? static_cast<ECType>(ib->second) : ECType::INVALID;
 }
 
 bool
