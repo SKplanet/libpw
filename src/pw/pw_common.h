@@ -56,6 +56,7 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
+#include <memory>
 
 // Thread
 #include <thread>
@@ -146,7 +147,7 @@ enum class ResultCode : int
 	TEMPORARY_REDIRECT = 307,
 
 	// Client Error 4xx
-	BAD_REQUEST = 400,	//<! 잘못된 인자값
+	BAD_REQUEST = 400,	//!< 잘못된 인자값
 	UNAUTHORIZED = 401,	//!< 인증 실패
 	PAYMENT_REQUIRED = 402,	//!< 유료 서비스
 	FORBIDDEN = 403,	//!< 접근 금지
@@ -736,8 +737,14 @@ using string_uset = std::unordered_set<std::string>;
 //! \brief 많이 쓰이는 std::map<std::string, void*>
 using strptr_cont = std::map<std::string, void*>;
 
+template<typename _Type>
+using strobj_cont = std::map<std::string, _Type>;
+
 //! \brief 많이 쓰이는 std::map<std::string, void*>
 using striptr_cont = std::map<std::string, void*, str_ci_less<std::string>>;
+
+template<typename _Type>
+using striobj_cont = std::map<std::string, _Type, str_ci_less<std::string>>;
 
 //! \brief 많이 쓰이는 std::map<int, void*>
 using intptr_cont = std::map<int, void*>;
@@ -761,6 +768,12 @@ url_type::operator= ( const host_type& host )
 	this->operator()(host.host, host.service, std::string());
 	return *this;
 }
+
+//! \brief 기본 삭제자
+template<typename _Type>
+struct deleter {
+    inline void operator() (_Type* ptr) { if (ptr) _Type::s_release(ptr); }
+};
 
 }; //namespace pw
 
